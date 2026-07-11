@@ -9,6 +9,10 @@
 <meta property="og:title" content="서울 여행">
 <meta property="og:description" content="일정 확인하고, 가고 싶은 곳에 투표해 주세요">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://seoul-wsbn.vercel.app/">
+<meta property="og:image" content="https://seoul-wsbn.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root{
@@ -57,14 +61,14 @@
   .btn-fill{
     display:inline-flex;align-items:center;justify-content:center;
     min-height:44px;padding:11px 22px;border-radius:9999px;
-    background:var(--primary);border:none;color:#fff;
+    background:var(--ink);border:none;color:#fff;
     font-family:inherit;font-size:17px;font-weight:400;letter-spacing:-0.374px;
     cursor:pointer;text-decoration:none;transition:transform .15s ease;
   }
   .btn-ghost{
     display:inline-flex;align-items:center;justify-content:center;
-    min-height:44px;padding:11px 22px;border-radius:9999px;
-    background:transparent;border:1px solid var(--primary);color:var(--primary);
+    min-height:44px;padding:11px 22px;border-radius:11px;
+    background:var(--pearl);border:1px solid var(--hairline);color:var(--ink-80);
     font-family:inherit;font-size:17px;font-weight:400;letter-spacing:-0.374px;
     cursor:pointer;text-decoration:none;transition:transform .15s ease;
   }
@@ -100,12 +104,12 @@
   }
   .tabbar .row{max-width:720px;margin:0 auto;display:flex;gap:8px;padding:10px 20px}
   .tab{
-    flex:1;min-height:44px;border:none;border-radius:9999px;background:transparent;
-    font-family:inherit;font-size:17px;font-weight:400;letter-spacing:-0.374px;color:var(--ink);
+    flex:1;min-height:44px;border:1px solid transparent;border-radius:9999px;background:transparent;
+    font-family:inherit;font-size:17px;font-weight:400;letter-spacing:-0.374px;color:var(--ink-48);
     cursor:pointer;transition:transform .15s ease;
   }
   .tab:active{transform:scale(0.95)}
-  .tab.on{background:var(--primary);color:#fff}
+  .tab.on{background:var(--canvas);color:var(--ink);border-color:var(--hairline);font-weight:600}
   .tab:focus-visible{outline:2px solid var(--primary-focus);outline-offset:2px}
 
   /* ---------- day panels ---------- */
@@ -129,7 +133,7 @@
   .weather .w-title h3{font-size:17px;font-weight:600;letter-spacing:-0.374px}
   .weather .w-title span{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48)}
   .w-strip{display:flex;gap:8px;overflow-x:auto;margin-top:16px;padding-bottom:4px;-webkit-overflow-scrolling:touch}
-  .w-hour{min-width:62px;flex:0 0 auto;text-align:center;background:var(--pearl);border:1px solid var(--divider);border-radius:8px;padding:10px 4px}
+  .w-hour{min-width:62px;flex:0 0 auto;text-align:center;background:var(--parchment);border-radius:8px;padding:10px 4px}
   .w-hour .t{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48)}
   .w-hour .c{font-size:17px;font-weight:600;letter-spacing:-0.374px;margin-top:2px}
   .w-hour .p{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48);margin-top:2px}
@@ -187,12 +191,13 @@
     display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;
   }
   .pl-actions{display:flex;gap:8px;flex:0 0 auto;margin-left:auto}
-  .pl-vote.selected{border:2px solid var(--primary-focus);color:var(--primary-focus);padding:7px 17px}
+  .pl-vote.selected,
+  .opt-vote.selected{border:2px solid var(--primary-focus);color:var(--primary-focus);padding:7px 17px}
 
   /* ---------- 챗봇 ---------- */
   .chat-fab{
     position:fixed;right:20px;bottom:24px;z-index:90;width:56px;height:56px;border-radius:9999px;
-    background:var(--primary);border:none;color:#fff;font-size:24px;cursor:pointer;
+    background:var(--ink);border:none;color:#fff;font-size:24px;cursor:pointer;
     display:flex;align-items:center;justify-content:center;transition:transform .15s ease;
   }
   .chat-fab:active{transform:scale(0.95)}
@@ -215,8 +220,8 @@
   .msg.bot a{color:var(--primary);text-decoration:none}
   .chat-chips{display:flex;gap:8px;overflow-x:auto;padding:0 20px 10px;flex:0 0 auto;-webkit-overflow-scrolling:touch}
   .chip{
-    flex:0 0 auto;min-height:44px;padding:8px 16px;border-radius:9999px;
-    border:1px solid var(--primary);background:transparent;color:var(--primary);
+    flex:0 0 auto;min-height:44px;padding:8px 16px;border-radius:11px;
+    border:1px solid var(--hairline);background:var(--pearl);color:var(--ink-80);
     font-size:14px;letter-spacing:-0.224px;font-family:inherit;cursor:pointer;transition:transform .15s ease;
   }
   .chip:active{transform:scale(0.95)}
@@ -228,7 +233,7 @@
   .chat-input:focus-visible{outline:2px solid var(--primary-focus);outline-offset:-1px}
   .chat-send{
     min-height:44px;padding:8px 18px;border-radius:9999px;border:none;
-    background:var(--primary);color:#fff;font-size:14px;font-family:inherit;cursor:pointer;transition:transform .15s ease;
+    background:var(--ink);color:#fff;font-size:14px;font-family:inherit;cursor:pointer;transition:transform .15s ease;
   }
   .chat-send:active{transform:scale(0.95)}
 
@@ -244,8 +249,8 @@
   .tl-move{font-size:14px;letter-spacing:-0.224px;color:var(--ink-48);margin-top:6px}
   .badge{
     display:inline-block;vertical-align:4px;margin-left:8px;
-    font-size:12px;font-weight:600;letter-spacing:-0.12px;color:var(--primary);
-    border:1px solid var(--primary);border-radius:9999px;padding:2px 10px;
+    font-size:12px;font-weight:600;letter-spacing:-0.12px;color:var(--ink-48);
+    background:var(--pearl);border:1px solid var(--hairline);border-radius:9999px;padding:2px 10px;
   }
 
   /* ---------- place card ---------- */
@@ -271,21 +276,40 @@
   .options{display:grid;gap:14px;margin-top:16px}
   .option{
     background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;
-    padding:24px;cursor:pointer;transition:transform .15s ease;
+    padding:24px;
   }
-  .option:active{transform:scale(0.95)}
-  .option:focus-visible{outline:2px solid var(--primary-focus);outline-offset:2px}
   .option.selected{border:2px solid var(--primary-focus);padding:23px}
   .opt-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
   .opt-name{font-size:21px;font-weight:600;letter-spacing:-0.374px;line-height:1.19}
   .opt-kind{font-size:14px;font-weight:400;color:var(--ink-48);letter-spacing:-0.224px}
   .opt-mine{font-size:12px;font-weight:600;letter-spacing:-0.12px;color:var(--primary);white-space:nowrap;display:none}
   .option.selected .opt-mine{display:inline}
+  .ptc{font-size:14px;letter-spacing:-0.224px;color:var(--ink-48);margin-top:14px}
+  .lead-badge{display:none;font-size:12px;font-weight:600;letter-spacing:-0.12px;color:var(--ink);background:var(--parchment);border:1px solid var(--hairline);border-radius:9999px;padding:2px 10px;white-space:nowrap}
+  .now-chip{display:inline-block;margin-left:8px;background:var(--primary);color:#fff;border-radius:9999px;padding:1px 10px;font-size:12px;font-weight:600;vertical-align:1px}
+  .tl-item.now::before{background:var(--primary)}
+  .rain-note{margin-top:12px;font-size:14px;letter-spacing:-0.224px;color:var(--ink-80);background:var(--parchment);border-radius:11px;padding:10px 14px}
+  .chk-title{text-align:center;font-size:21px;font-weight:600;letter-spacing:-0.374px;margin-top:56px}
+  .chk-sub{text-align:center;font-size:14px;letter-spacing:-0.224px;color:var(--ink-48);margin-top:6px}
+  .chk-list{display:grid;gap:12px;margin-top:24px}
+  .chk-row{
+    background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:18px 20px;
+    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .chk-txt{flex:1;min-width:200px}
+  .chk-txt b{font-size:17px;font-weight:600;letter-spacing:-0.374px;display:block}
+  .chk-txt span{font-size:14px;color:var(--ink-48);letter-spacing:-0.224px;line-height:1.43;display:block;margin-top:4px}
+  .chk-side{display:flex;align-items:center;gap:10px;margin-left:auto}
+  .chk-btn.selected{border:2px solid var(--primary-focus);color:var(--primary-focus);padding:7px 17px}
+  .mh{display:flex;align-items:center;gap:12px;margin-top:12px;background:var(--parchment);border-radius:11px;padding:12px 14px}
+  .mh .mh-ico{font-size:28px;line-height:1}
+  .mh .mh-name{font-size:14px;font-weight:600;letter-spacing:-0.224px;line-height:1.29}
+  .mh .mh-price{font-size:14px;color:var(--ink-48);letter-spacing:-0.224px;margin-top:2px;line-height:1.29}
   .opt-desc{font-size:14px;letter-spacing:-0.224px;line-height:1.43;color:var(--ink-80);margin-top:10px}
   .opt-meta{font-size:14px;letter-spacing:-0.224px;line-height:1.43;color:var(--ink-48);margin-top:8px}
   .opt-list{list-style:none;margin-top:10px;display:grid;gap:6px}
   .opt-list li{font-size:14px;letter-spacing:-0.224px;color:var(--ink-80);line-height:1.43}
-  .opt-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--divider)}
+  .opt-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--divider)}
   .tally{font-size:14px;letter-spacing:-0.224px;line-height:1.43;min-height:20px}
   .tally b{font-weight:600}
   .tally .names{color:var(--ink-48)}
@@ -332,16 +356,18 @@
 
 <!-- ===================== hero ===================== -->
 <header class="hero">
-  <p class="eyebrow">2026. 7. 13 – 7. 14 · 서울</p>
+  <p class="eyebrow" id="heroEyebrow">2026. 7. 13 – 7. 14 · 서울</p>
   <h1>서울 여행</h1>
   <p class="lead">일정 확인하고,<br>가고 싶은 곳에 투표해 주세요.</p>
   <div class="cta">
     <a class="btn-fill" href="#tabbar">일정 보기</a>
+    <button type="button" class="btn-ghost" id="shareBtn">공유하기</button>
   </div>
   <div class="voter">
     <span class="who">투표하는 사람: <strong id="voterName">선택 안 됨</strong></span>
     <button type="button" class="btn-ghost btn-sm" id="changeVoter">변경</button>
   </div>
+  <p class="ptc" id="participation"></p>
 </header>
 
 <!-- ===================== 일자별 요약 (parchment band) ===================== -->
@@ -362,6 +388,23 @@
         <div class="s">빛의 시어터 몰입형 미디어아트</div>
         <span class="go">일정 보기 ›</span>
       </button>
+    </div>
+
+    <h2 class="chk-title">예약 체크리스트</h2>
+    <p class="chk-sub">놓치면 일정이 꼬여요 — 완료한 사람이 눌러 주세요 (모두에게 공유)</p>
+    <div class="chk-list">
+      <div class="chk-row">
+        <div class="chk-txt"><b>빛의 시어터 예매</b><span>네이버 예매 약 10% 할인 · 결제 1시간 후 바코드 활성화 — 미리 예매!</span></div>
+        <div class="chk-side"><span class="tally" data-chktally></span><button type="button" class="btn-ghost btn-sm chk-btn" data-item="check-빛의시어터">완료</button></div>
+      </div>
+      <div class="chk-row">
+        <div class="chk-txt"><b>꽃, 궁 예약 (점심 후보 확정 시)</b><span>1일 전 예약 필요 — 7/13 밤까지 결정</span></div>
+        <div class="chk-side"><span class="tally" data-chktally></span><button type="button" class="btn-ghost btn-sm chk-btn" data-item="check-꽃궁예약">완료</button></div>
+      </div>
+      <div class="chk-row">
+        <div class="chk-txt"><b>쌤쌤쌤 캐치테이블 줄서기 (당일)</b><span>7/14 오전, 빛의 시어터 보면서 원격 줄서기 걸어두기</span></div>
+        <div class="chk-side"><span class="tally" data-chktally></span><button type="button" class="btn-ghost btn-sm chk-btn" data-item="check-쌤쌤쌤줄서기">완료</button></div>
+      </div>
     </div>
   </div>
 </section>
@@ -406,6 +449,7 @@
           <div class="tl-time">10:00~13:00 권장</div>
           <div class="tl-label">국립중앙박물관</div>
           <article class="card">
+            <div class="mh"><span class="mh-ico">🏛️</span><div><div class="mh-name">상설전시 무료</div><div class="mh-price">특별전 「우리들의 밥상」 「태국 미술」 유료</div></div></div>
             <ul class="facts">
               <li><span>위치</span>용산구 서빙고로 137 (이촌역 2번 출구 연결)</li>
               <li><span>운영</span>매일 09:30~17:30 (월요일 정상 개관)</li>
@@ -425,6 +469,7 @@
               <div class="pl-actions">
                 <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-국립중앙박물관">가고 싶어요</button>
                 <a class="btn-fill btn-sm" href="https://map.naver.com/p/search/국립중앙박물관" target="_blank" rel="noopener">네이버지도</a>
+                <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/국립중앙박물관,37.524,126.9804" target="_blank" rel="noopener">길찾기</a>
               </div>
             </div>
           </article>
@@ -440,6 +485,7 @@
                 <div class="opt-name">백옥 용산 <span class="opt-kind">곰탕</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🍲</span><div><div class="mh-name">돼지곰탕 11,000원</div><div class="mh-price">열곰탕 12,000원 · 배추만두(5개) 10,000원</div></div></div>
               <p class="opt-desc">깔끔하고 담백한 곰탕, 배추만두</p>
               <p class="opt-meta">용산구 한강대로10길 11-76 · 매일 11:00~22:00</p>
               <div class="mimo"><div class="avatar">😋</div><div class="bubble">깨끗하고 속 편한 맛이에요<span class="src">구글 4.9점 · 리뷰 257개</span></div></div>
@@ -448,6 +494,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-백옥">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/백옥 용산" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/백옥 용산,37.5228,126.972" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -457,6 +504,7 @@
                 <div class="opt-name">스즈란테이 본점 <span class="opt-kind">일식 도시락</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🍱</span><div><div class="mh-name">특도시락 28,000원</div><div class="mh-price">로스까스 14,000원 · 돈까스덮밥 16,000원</div></div></div>
               <p class="opt-desc">사시미·튀김·계란찜 포함 특도시락, 가성비 좋은 정통 일식</p>
               <p class="opt-meta">용산구 이촌로 245 (건물 지하) · 매일 11:30~21:30</p>
               <div class="mimo"><div class="avatar">🍱</div><div class="bubble">특도시락 가성비가 좋아요. 건물 지하에 있어서 잘 찾아야 해요!<span class="src">구글 4.2점 · 리뷰 769개</span></div></div>
@@ -465,6 +513,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-스즈란테이">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/스즈란테이 이촌" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/스즈란테이,37.5222,126.97" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -474,6 +523,7 @@
                 <div class="opt-name">르미야 <span class="opt-kind">한일 퓨전 파스타</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🍝</span><div><div class="mh-name">명란크림파스타 16,000원</div><div class="mh-price">갓김치페투치네 17,000원 · 와인비프카레 15,000원</div></div></div>
               <p class="opt-desc">한일 퓨전 파스타, 아기자기한 동네 맛집</p>
               <p class="opt-meta">용산구 이촌로77길 19 · 매일 11:00~15:00, 16:30~21:30</p>
               <div class="mimo"><div class="avatar">🍝</div><div class="bubble">명란파스타가 시그니처예요!<span class="src">구글 4.2점 · 리뷰 158개</span></div></div>
@@ -482,6 +532,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-르미야">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/르미야 이촌" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/르미야,37.5218,126.9735" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -499,6 +550,7 @@
                 <div class="opt-name">더현대 서울 <span class="opt-kind">여의도</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🛍️</span><div><div class="mh-name">5층 실내 정원 사운즈 포레스트</div><div class="mh-price">입장 무료</div></div></div>
               <p class="opt-desc">서울 최대 규모 백화점. 전관 실내 냉방, 지하 식품관 구경만으로도 반나절. 사촌동생(영등포 거주) 합류 동선 최적</p>
               <p class="opt-meta">영등포구 여의대로 108 · 이촌 → 여의도 택시 약 15~20분</p>
               <div class="mimo"><div class="avatar">🤳</div><div class="bubble">5층 실내 정원 '사운즈 포레스트'가 대표 포토스팟이에요<span class="src">방문 후기 요약</span></div></div>
@@ -507,6 +559,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-더현대">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/더현대서울" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/더현대 서울,37.5259,126.9285" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -516,6 +569,7 @@
                 <div class="opt-name">광장시장 <span class="opt-kind">종로</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🥘</span><div><div class="mh-name">빈대떡 · 마약김밥 · 육회</div><div class="mh-price">노점별 가격 상이</div></div></div>
               <p class="opt-desc">아케이드 지붕 있는 전통시장. 이모님 세대 취향 저격</p>
               <p class="opt-meta">종로구 창경궁로 88 · 이촌 → 종로5가 택시 약 20~25분</p>
               <div class="mimo"><div class="avatar">🥟</div><div class="bubble">빈대떡·마약김밥·육회 먹거리 성지! 대신 냉방은 약해요(선풍기 수준)<span class="src">방문 후기 요약</span></div></div>
@@ -524,6 +578,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-광장시장">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/광장시장" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/광장시장,37.57,126.9996" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -565,6 +620,7 @@
           <div class="tl-time">10:00~12:00</div>
           <div class="tl-label">빛의 시어터</div>
           <article class="card">
+            <div class="mh"><span class="mh-ico">🎨</span><div><div class="mh-name">성인 29,000원</div><div class="mh-price">네이버 예매 시 약 10% 할인 — 미리 예매!</div></div></div>
             <p class="desc">1,500평·층고 21m 국내 최대급 몰입형 미디어아트. 벽·바닥·기둥 전체에 명화가 투사되고 클래식 음악이 함께 흐름. 현재 전시: 「파라오의 이집트」(메인 36분) + 「이응노: 위대한 예술적 여정」(숏쇼)</p>
             <ul class="facts">
               <li><span>위치</span>광진구 워커힐로 177, 워커힐 호텔 B1 (잠실에서 택시 15~20분 / 광나루역·강변역 무료셔틀)</li>
@@ -579,6 +635,7 @@
               <div class="pl-actions">
                 <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-빛의시어터">가고 싶어요</button>
                 <a class="btn-fill btn-sm" href="https://map.naver.com/p/search/빛의시어터" target="_blank" rel="noopener">네이버지도</a>
+                <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/빛의시어터,37.5551,127.11" target="_blank" rel="noopener">길찾기</a>
               </div>
             </div>
           </article>
@@ -594,14 +651,16 @@
                 <div class="opt-name">쌤쌤쌤 롯데월드몰점 <span class="opt-kind">양식</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🧀</span><div><div class="mh-name">클래식 라자냐 26,000원</div><div class="mh-price">버섯뇨끼 23,000원 · 철판스테이크 46,000원</div></div></div>
               <p class="opt-desc">흑백요리사 출연 셰프 매장, 롤라자냐 시그니처</p>
-              <p class="opt-meta">송파구 올림픽로 300 (롯데월드몰) · 캐치테이블 원격 줄서기 권장</p>
+              <p class="opt-meta">송파구 올림픽로 300 (롯데월드몰 5층) · 캐치테이블 원격 줄서기 권장</p>
               <div class="mimo"><div class="avatar">🧑‍🍳</div><div class="bubble">흑백요리사 셰프 매장이라 웨이팅이 길어요 — 원격 줄서기 필수!<span class="src">구글 4.9점 · 리뷰 6,906개</span></div></div>
               <div class="opt-foot">
                 <span class="tally" data-tally></span>
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-쌤쌤쌤">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/쌤쌤쌤 롯데월드몰" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/쌤쌤쌤,37.5127,127.1022" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -611,6 +670,7 @@
                 <div class="opt-name">꽃, 궁 <span class="opt-kind">한정식</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🍖</span><div><div class="mh-name">갈비 코스 한정식</div><div class="mh-price">가격 예약 시 확인 · 1일 전 예약</div></div></div>
               <p class="opt-desc">한정식 갈비 코스. 1일 전 예약 필요</p>
               <p class="opt-meta">송파구 올림픽로 300 (롯데월드몰)</p>
               <div class="mimo"><div class="avatar">👵</div><div class="bubble">전 좌석 개별룸에 석촌호수뷰까지 — 어른 모시기에 딱이에요<span class="src">구글 4.8점 · 리뷰 217개</span></div></div>
@@ -619,6 +679,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-꽃궁">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/꽃궁 롯데월드몰" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/꽃궁,37.5123,127.1031" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -628,14 +689,16 @@
                 <div class="opt-name">분지로 <span class="opt-kind">돈카츠</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🍛</span><div><div class="mh-name">로스카츠 16,000원</div><div class="mh-price">히레카츠 18,000원 · 모듬 29,000원</div></div></div>
               <p class="opt-desc">바삭·촉촉 밸런스 좋은 돈카츠</p>
-              <p class="opt-meta">송파구 올림픽로 300 (롯데월드몰) · 좌석 15석 내외</p>
+              <p class="opt-meta">송파구 올림픽로 300 (롯데월드몰 5층) · 좌석 15석 내외</p>
               <div class="mimo"><div class="avatar">😋</div><div class="bubble">바삭하고 촉촉한 밸런스가 좋아요. 자리가 적어서 웨이팅 있어요<span class="src">구글 4.9점 · 리뷰 996개</span></div></div>
               <div class="opt-foot">
                 <span class="tally" data-tally></span>
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-분지로">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/분지로 롯데월드몰" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/분지로,37.5119,127.1025" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -654,6 +717,7 @@
                 <div class="opt-name">별마당 도서관 <span class="opt-kind">코엑스 · 삼성동</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">📚</span><div><div class="mh-name">입장 무료</div><div class="mh-price">10:30~22:00 연중무휴</div></div></div>
               <p class="opt-desc">스타필드 코엑스몰 한가운데 13m 대형 서가 3개, 책 5만 권의 무료 개방 도서관. 몰 구경까지 한 번에</p>
               <p class="opt-meta">강남구 영동대로 513 (코엑스몰 B1) · 10:30~22:00 · 무료 · 잠실역 → 삼성역 2호선 3정거장</p>
               <div class="mimo"><div class="avatar">📚</div><div class="bubble">실내 냉방에 앉을 곳도 많아서 한여름 오후에 최고예요<span class="src">스타필드 공식 정보</span></div></div>
@@ -662,6 +726,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-별마당">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/별마당도서관" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/별마당도서관,37.511,127.059" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -671,6 +736,7 @@
                 <div class="opt-name">성수동 카페거리 <span class="opt-kind">성수 · 연무장길</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🧋</span><div><div class="mh-name">팝업스토어 · 카페 골목</div><div class="mh-price">구경 무료</div></div></div>
               <p class="opt-desc">연무장길 따라 브랜드 팝업스토어·카페가 이어지는 트렌드 동네. 7월엔 토이 스토리 협업 팝업 등 진행 중</p>
               <p class="opt-meta">성동구 연무장길 일대 (성수역 4번 출구 도보 3분) · 잠실역 → 성수역 2호선 5정거장</p>
               <div class="mimo"><div class="avatar">🛍️</div><div class="bubble">팝업 구경 재미! 대신 야외 이동이 많아서 더위는 감안하세요<span class="src">2026년 7월 팝업 정보</span></div></div>
@@ -679,6 +745,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-성수동">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/성수동 카페거리" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/성수동카페거리,37.5427,127.0557" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -696,14 +763,16 @@
                 <div class="opt-name">루반로즈 <span class="opt-kind">이탈리안 · 호수뷰</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🍷</span><div><div class="mh-name">파스타 24,000~30,000원</div><div class="mh-price">스테이크 53,900원~ · 2인 세트 10만원대</div></div></div>
               <p class="opt-desc">석촌호수 + 롯데타워 뷰, 루프탑 있음</p>
-              <p class="opt-meta">송파구 석촌호수로 274 · 매일 11:00~15:00, 17:00~22:00</p>
+              <p class="opt-meta">송파구 석촌호수로 274 (씨엠빌딩 8층) · 매일 11:00~15:00, 17:00~22:00</p>
               <div class="mimo"><div class="avatar">🌆</div><div class="bubble">호수랑 롯데타워 뷰가 시원해요 — 마지막 밤 분위기용으로 최고!<span class="src">구글 4.5점 · 리뷰 175개</span></div></div>
               <div class="opt-foot">
                 <span class="tally" data-tally></span>
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-루반로즈">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/루반로즈 석촌호수" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/루반로즈,37.5107,127.1054" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -713,6 +782,7 @@
                 <div class="opt-name">마신내 <span class="opt-kind">돈카츠·일식</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🍚</span><div><div class="mh-name">등심돈가스 12,000원</div><div class="mh-price">안심·치즈돈가스 14,000원 · 2인 세트 32,000원</div></div></div>
               <p class="opt-desc">양 푸짐한 돈카츠·일식</p>
               <p class="opt-meta">송파구 송파대로 451 (석촌역 8번 출구 도보 3분) · 17:00~21:00</p>
               <div class="mimo"><div class="avatar">🧳</div><div class="bubble">서울 2주 여행 중 최고의 식사였어요!<span class="src">구글 외국인 후기 · 4.8점 (리뷰 904개)</span></div></div>
@@ -721,6 +791,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-마신내">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/마신내 석촌" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/마신내,37.5042,127.1049" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -730,6 +801,7 @@
                 <div class="opt-name">세컨드포레스트 송리단길점 <span class="opt-kind">이탈리안</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
+              <div class="mh"><span class="mh-ico">🌿</span><div><div class="mh-name">들깨크림파스타 (시그니처)</div><div class="mh-price">파스타 14,900~15,900원</div></div></div>
               <p class="opt-desc">이탈리안, 송리단길 감성</p>
               <p class="opt-meta">송파구 백제고분로45길 6 · 11:30~21:00</p>
               <div class="mimo"><div class="avatar">🌿</div><div class="bubble">들깨크림파스타가 시그니처! 웨이팅은 있는 편이에요<span class="src">구글 4.4점 · 리뷰 109개</span></div></div>
@@ -738,6 +810,7 @@
                 <div class="pl-actions">
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-세컨드포레스트">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/세컨드포레스트 송리단길" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/세컨드포레스트,37.509,127.1065" target="_blank" rel="noopener">길찾기</a>
                 </div>
               </div>
             </div>
@@ -751,6 +824,7 @@
           <p class="tl-move">해 진 후라 더위 부담 적음, 롯데타워 야경</p>
           <div class="walk-foot">
             <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-석촌호수">가고 싶어요</button>
+            <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/석촌호수,37.5093,127.1032" target="_blank" rel="noopener">길찾기</a>
             <span class="tally" data-extally></span>
           </div>
         </li>
@@ -788,7 +862,7 @@
 </main>
 
 <footer>
-  <p>메뉴와 코스는 투표 결과 보고 같이 정해요.<br>투표는 언제든 다시 누르면 바꿀 수 있어요.</p>
+  <p>메뉴와 코스는 '가고 싶어요' 결과 보고 같이 정해요.<br>버튼을 한 번 더 누르면 취소돼요.</p>
 </footer>
 
 <!-- ===================== 이름 선택 모달 ===================== -->
@@ -911,7 +985,7 @@
     renderVotes();
     if (pendingVote) {
       var pv = pendingVote; pendingVote = null;
-      if (pv.wish) { castWish(pv.wish); } else { castVote(pv.item, pv.choice); }
+      if (pv.toggle) { castToggle(pv.toggle, pv.val); }
     }
   }
   $all('.name-btn').forEach(function(b){
@@ -973,15 +1047,16 @@
   }
 
   var WISH = '가고싶어요';
-  function castWish(itemId){
+  var DONE = '완료';
+  function castToggle(itemId, onValue){
     if (!myName()) {
-      pendingVote = { wish: itemId };
+      pendingVote = { toggle: itemId, val: onValue };
       openNameModal();
       return;
     }
     var name = myName();
-    var mine = votes.some(function(v){ return v.voter_name === name && v.item_id === itemId && v.choice === WISH; });
-    var choice = mine ? '취소' : WISH;
+    var mine = votes.some(function(v){ return v.voter_name === name && v.item_id === itemId && v.choice === onValue; });
+    var choice = mine ? '취소' : onValue;
     votes = votes.filter(function(v){ return !(v.voter_name === name && v.item_id === itemId); });
     votes.push({ voter_name: name, item_id: itemId, choice: choice });
     renderVotes();
@@ -995,49 +1070,77 @@
       fetchVotes();
     });
   }
-
-  function castVote(itemId, choice){
-    if (!myName()) {
-      pendingVote = { item: itemId, choice: choice };
-      openNameModal();
-      return;
-    }
-    var name = myName();
-    // 낙관적 갱신
-    votes = votes.filter(function(v){ return !(v.voter_name === name && v.item_id === itemId); });
-    votes.push({ voter_name: name, item_id: itemId, choice: choice });
-    renderVotes();
-    upsertVote({ voter_name: name, item_id: itemId, choice: choice }).catch(function(err){
-      var msg = (err && err.message) ? err.message : '';
-      if (msg.indexOf('voter_name_check') !== -1 || msg.indexOf('check constraint') !== -1) {
-        toast('"' + name + '" 이름은 아직 등록이 안 돼 있어요. 연정에게 알려 주세요!');
-      } else {
-        toast('투표 저장에 실패했어요. 잠시 후 다시 눌러주세요.');
-      }
-      fetchVotes();
-    });
-  }
+  function castWish(itemId){ castToggle(itemId, WISH); }
 
   function renderVotes(){
     var name = myName();
+    // 후보 카드: '가고 싶어요' 기준으로 선택 표시 + 집계 + 그룹별 1위 배지
     $all('.options').forEach(function(group){
-      var itemId = group.dataset.item;
+      var infos = [];
       $all('.option', group).forEach(function(opt){
-        var choice = opt.dataset.choice;
-        var rows = votes.filter(function(v){ return v.item_id === itemId && v.choice === choice; });
+        var wishBtn = $('.pl-vote', opt);
+        if (!wishBtn) { return; }
+        var rows = votes.filter(function(v){ return v.item_id === wishBtn.dataset.item && v.choice === WISH; });
         var mine = rows.some(function(v){ return v.voter_name === name; });
         opt.classList.toggle('selected', mine);
         var tally = $('[data-tally]', opt);
         if (tally) {
           if (rows.length === 0) {
-            tally.innerHTML = '<b>0표</b>';
+            tally.innerHTML = '<b>0명</b>';
           } else {
             var names = rows.map(function(v){ return esc(v.voter_name); }).join(', ');
-            tally.innerHTML = '<b>' + rows.length + '표</b> <span class="names">· ' + names + '</span>';
+            tally.innerHTML = '<b>' + rows.length + '명</b> <span class="names">· ' + names + '</span>';
           }
         }
+        infos.push({ opt: opt, n: rows.length });
+      });
+      var max = 0;
+      infos.forEach(function(i){ if (i.n > max) { max = i.n; } });
+      var leaders = infos.filter(function(i){ return max > 0 && i.n === max; });
+      infos.forEach(function(i){
+        var b = $('.lead-badge', i.opt);
+        if (!b) {
+          b = document.createElement('span');
+          b.className = 'lead-badge';
+          var top = $('.opt-top', i.opt);
+          if (top) { top.appendChild(b); }
+        }
+        var isLead = max > 0 && i.n === max;
+        b.style.display = isLead ? 'inline-block' : 'none';
+        b.textContent = isLead ? (leaders.length > 1 ? '👑 공동 1위' : '👑 현재 1위') : '';
       });
     });
+    // 예약 체크리스트
+    $all('.chk-btn').forEach(function(btn){
+      var rows = votes.filter(function(v){ return v.item_id === btn.dataset.item && v.choice === DONE; });
+      var done = rows.length > 0;
+      var mine = rows.some(function(v){ return v.voter_name === name; });
+      btn.classList.toggle('selected', done);
+      btn.textContent = done ? '✓ 완료' : '완료';
+      var side = btn.closest('.chk-side');
+      var t = side ? $('[data-chktally]', side) : null;
+      if (t) {
+        t.innerHTML = done
+          ? '<span class="names">' + rows.map(function(v){ return esc(v.voter_name); }).join(', ') + ' 완료</span>'
+          : '<span class="names">아직</span>';
+      }
+      if (mine) { btn.classList.add('selected'); }
+    });
+    // 참여 현황
+    var pEl = document.getElementById('participation');
+    if (pEl) {
+      var seen = {};
+      votes.forEach(function(v){ seen[v.voter_name] = true; });
+      var VOTERS = ['연정', '금주', '엄마', '이모'];
+      var doneN = VOTERS.filter(function(n){ return seen[n]; });
+      var missing = VOTERS.filter(function(n){ return !seen[n]; });
+      var extraN = Object.keys(seen).filter(function(n){ return VOTERS.indexOf(n) === -1; }).length;
+      if (missing.length === 0) {
+        pEl.textContent = '🎉 ' + (4 + extraN) + '명 모두 투표 참여 완료!';
+      } else {
+        pEl.textContent = '투표 참여 ' + (doneN.length + extraN) + '명 · 아직 안 한 사람: ' + missing.join(', ');
+      }
+    }
     // 추가 장소 찜 투표
     $all('.pl-vote').forEach(function(btn){
       var itemId = btn.dataset.item;
@@ -1058,23 +1161,10 @@
     });
   }
 
-  /* ---------- 투표 클릭 ---------- */
+  /* ---------- 후보 카드: '가고 싶어요' 버튼 하나로만 투표 (두 번 누르면 취소) ---------- */
   $all('.option').forEach(function(opt){
-    opt.addEventListener('click', function(e){
-      // '가고 싶어요' 버튼·지도 링크 클릭은 선택 투표로 전파 금지
-      if (e.target.closest && e.target.closest('.pl-vote, a')) { return; }
-      castVote(opt.closest('.options').dataset.item, opt.dataset.choice);
-    });
-    opt.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        opt.click();
-      }
-    });
-  });
-  // 지도 링크는 투표로 전파 금지
-  $all('.option a').forEach(function(a){
-    a.addEventListener('click', function(e){ e.stopPropagation(); });
+    opt.removeAttribute('role');
+    opt.removeAttribute('tabindex');
   });
 
   /* ---------- 실시간 + 폴링 폴백 ---------- */
@@ -1247,18 +1337,18 @@
   /* ---------- 장소 전체 리스트 ---------- */
   var PLACES = [
     { area: '용산 · 이촌 — 7/13', name: '국립중앙박물관', kind: '박물관', addr: '용산구 서빙고로 137 (이촌역 2번 출구 연결)', hours: '매일 09:30~17:30 (월요일 정상 개관)', extra: '상설전시 무료 / 특별전 유료 · 「우리들의 밥상」 「태국 미술」 특별전', url: NM + '국립중앙박물관', alias: ['박물관', '국중박'] },
-    { area: '용산 · 이촌 — 7/13', name: '백옥 용산', kind: '곰탕 · 점심 후보', addr: '용산구 한강대로10길 11-76', hours: '매일 11:00~22:00', extra: '구글 4.9점 (리뷰 257개)', url: NM + '백옥 용산', alias: ['백옥'] },
-    { area: '용산 · 이촌 — 7/13', name: '스즈란테이 본점', kind: '일식 도시락 · 점심 후보', addr: '용산구 이촌로 245 (건물 지하)', hours: '매일 11:30~21:30', extra: '구글 4.2점 (리뷰 769개)', url: NM + '스즈란테이 이촌', alias: ['스즈란테이', '스즈란'] },
-    { area: '용산 · 이촌 — 7/13', name: '르미야', kind: '한일 퓨전 파스타 · 점심 후보', addr: '용산구 이촌로77길 19', hours: '매일 11:00~15:00, 16:30~21:30', extra: '구글 4.2점 (리뷰 158개) · 명란파스타', url: NM + '르미야 이촌', alias: ['르미야'] },
+    { area: '용산 · 이촌 — 7/13', name: '백옥 용산', kind: '곰탕 · 점심 후보', addr: '용산구 한강대로10길 11-76', hours: '매일 11:00~22:00', extra: '돼지곰탕 11,000원 · 구글 4.9점 (리뷰 257개)', url: NM + '백옥 용산', alias: ['백옥'] },
+    { area: '용산 · 이촌 — 7/13', name: '스즈란테이 본점', kind: '일식 도시락 · 점심 후보', addr: '용산구 이촌로 245 (건물 지하)', hours: '매일 11:30~21:30', extra: '특도시락 28,000원 · 구글 4.2점 (리뷰 769개)', url: NM + '스즈란테이 이촌', alias: ['스즈란테이', '스즈란'] },
+    { area: '용산 · 이촌 — 7/13', name: '르미야', kind: '한일 퓨전 파스타 · 점심 후보', addr: '용산구 이촌로77길 19', hours: '매일 11:00~15:00, 16:30~21:30', extra: '명란크림파스타 16,000원 · 구글 4.2점 (리뷰 158개)', url: NM + '르미야 이촌', alias: ['르미야'] },
     { area: '여의도 · 종로 — 7/13 오후 후보', name: '더현대 서울', kind: '백화점', addr: '영등포구 여의대로 108', hours: '', extra: "5층 '사운즈 포레스트' 포토스팟 · 지하 식품관(바오서울·쬬쬬·릴버거)", url: NM + '더현대서울', alias: ['더현대', '현대백화점', '식품관'] },
     { area: '여의도 · 종로 — 7/13 오후 후보', name: '광장시장', kind: '전통시장', addr: '종로구 창경궁로 88', hours: '', extra: '빈대떡·마약김밥·육회 · 냉방 약함', url: NM + '광장시장', alias: ['광장'] },
     { area: '광진 — 7/14', name: '빛의 시어터', kind: '몰입형 미디어아트', addr: '광진구 워커힐로 177, 워커힐 호텔 B1', hours: '매일 10:00~ (마감 시즌별 상이)', extra: '성인 29,000원 · 네이버 예매 약 10% 할인 — 미리 예매!', url: NM + '빛의시어터', alias: ['빛의', '시어터', '미디어아트', '워커힐'] },
-    { area: '잠실 · 석촌호수 — 7/14', name: '쌤쌤쌤 롯데월드몰점', kind: '양식 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '구글 4.9점 (리뷰 6,906개) · 캐치테이블 원격 줄서기 권장', url: NM + '쌤쌤쌤 롯데월드몰', alias: ['쌤쌤쌤', '샘샘샘'] },
-    { area: '잠실 · 석촌호수 — 7/14', name: '꽃, 궁', kind: '한정식 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '구글 4.8점 (리뷰 217개) · 1일 전 예약 필요', url: NM + '꽃궁 롯데월드몰', alias: ['꽃궁'] },
-    { area: '잠실 · 석촌호수 — 7/14', name: '분지로', kind: '돈카츠 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '구글 4.9점 (리뷰 996개) · 좌석 15석 내외', url: NM + '분지로 롯데월드몰', alias: ['분지로'] },
-    { area: '잠실 · 석촌호수 — 7/14', name: '루반로즈', kind: '이탈리안 · 저녁 후보', addr: '송파구 석촌호수로 274', hours: '매일 11:00~15:00, 17:00~22:00', extra: '구글 4.5점 (리뷰 175개) · 호수뷰 · 루프탑', url: NM + '루반로즈 석촌호수', alias: ['루반'] },
-    { area: '잠실 · 석촌호수 — 7/14', name: '마신내', kind: '돈카츠 · 일식 · 저녁 후보', addr: '송파구 송파대로 451 (석촌역 8번 출구 도보 3분)', hours: '17:00~21:00', extra: '구글 4.8점 (리뷰 904개)', url: NM + '마신내 석촌', alias: ['마신내'] },
-    { area: '잠실 · 석촌호수 — 7/14', name: '세컨드포레스트 송리단길점', kind: '이탈리안 · 저녁 후보', addr: '송파구 백제고분로45길 6', hours: '11:30~21:00', extra: '구글 4.4점 (리뷰 109개) · 들깨크림파스타', url: NM + '세컨드포레스트 송리단길', alias: ['세컨드포레스트', '세컨디포레스트', '송리단길'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '쌤쌤쌤 롯데월드몰점', kind: '양식 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '라자냐 26,000원 · 구글 4.9점 (리뷰 6,906개) · 캐치테이블 원격 줄서기 권장', url: NM + '쌤쌤쌤 롯데월드몰', alias: ['쌤쌤쌤', '샘샘샘'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '꽃, 궁', kind: '한정식 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '갈비 코스 (가격 예약 문의) · 구글 4.8점 (리뷰 217개) · 1일 전 예약 필요', url: NM + '꽃궁 롯데월드몰', alias: ['꽃궁'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '분지로', kind: '돈카츠 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '로스카츠 16,000원 · 구글 4.9점 (리뷰 996개) · 좌석 15석 내외', url: NM + '분지로 롯데월드몰', alias: ['분지로'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '루반로즈', kind: '이탈리안 · 저녁 후보', addr: '송파구 석촌호수로 274', hours: '매일 11:00~15:00, 17:00~22:00', extra: '파스타 24,000~30,000원 · 구글 4.5점 (리뷰 175개) · 호수뷰 · 루프탑', url: NM + '루반로즈 석촌호수', alias: ['루반'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '마신내', kind: '돈카츠 · 일식 · 저녁 후보', addr: '송파구 송파대로 451 (석촌역 8번 출구 도보 3분)', hours: '17:00~21:00', extra: '등심돈가스 12,000원 · 구글 4.8점 (리뷰 904개)', url: NM + '마신내 석촌', alias: ['마신내'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '세컨드포레스트 송리단길점', kind: '이탈리안 · 저녁 후보', addr: '송파구 백제고분로45길 6', hours: '11:30~21:00', extra: '들깨크림파스타 등 14,900~15,900원 · 구글 4.4점 (리뷰 109개)', url: NM + '세컨드포레스트 송리단길', alias: ['세컨드포레스트', '세컨디포레스트', '송리단길'] },
     { area: '잠실 · 석촌호수 — 7/14', name: '석촌호수', kind: '야간 산책 · 식후 선택', addr: '송파구 잠실동 47 일대', hours: '', extra: '해 진 후 산책 · 롯데타워 야경', url: null, alias: ['호수', '산책'] },
     { area: '삼성 · 성수 — 7/14 오후 후보', name: '별마당 도서관', kind: '도서관', addr: '강남구 영동대로 513 (코엑스몰 B1)', hours: '10:30~22:00 · 무료', extra: '잠실역 → 삼성역 2호선 3정거장', url: NM + '별마당도서관', alias: ['별마당', '코엑스'] },
     { area: '삼성 · 성수 — 7/14 오후 후보', name: '성수동 카페거리', kind: '팝업 · 카페', addr: '성동구 연무장길 일대 (성수역 4번 출구 도보 3분)', hours: '', extra: '잠실역 → 성수역 2호선 5정거장 · 야외 이동 많음', url: NM + '성수동 카페거리', alias: ['성수', '연무장'] }
@@ -1266,12 +1356,12 @@
 
   /* 일정 밖 추가 장소 — "추가 장소" 탭에 표시, vote: 찜 투표 item_id */
   var EXTRAS = [
-    { area: '용산 · 한남', name: '전쟁기념관', kind: '박물관 · 무료', addr: '용산구 이태원로 29', hours: '09:30~18:00 (입장 마감 17:30)', extra: '⚠️ 월요일 휴관 — 7/13은 불가, 7/14 가능 · 상설전시 무료 · 대규모 실내', url: NM + '전쟁기념관', alias: ['전쟁기념관'], vote: 'extra-전쟁기념관' },
-    { area: '용산 · 한남', name: '리움미술관', kind: '미술관', addr: '용산구 이태원로55길 60-16 (한남동)', hours: '화~일 10:00~18:00', extra: '⚠️ 월요일 휴관 · 고미술 상설전 무료 · 사전 예약 권장 (14일 전 오픈, 현장 발권은 대기)', url: NM + '리움미술관', alias: ['리움'], vote: 'extra-리움미술관' },
-    { area: '삼성 · 성수', name: '봉은사', kind: '도심 사찰', addr: '강남구 봉은사로 531', hours: '', extra: '무료 · 코엑스(별마당 도서관)에서 도보 약 10분 — 7/14 오후 연계 가능', url: NM + '봉은사', alias: ['봉은사'], vote: 'extra-봉은사' },
-    { area: '삼성 · 성수', name: '그라운드시소 성수', kind: '전시 · 뮤지엄', addr: '성동구 아차산로17길 49 (생각공장 데시앙플렉스 B1)', hours: '', extra: '⚠️ 전시 교체형 — 진행 전시 홈페이지 확인 필수 · 성수동 카페거리 연계', url: NM + '그라운드시소 성수', alias: ['그라운드시소', '시소'], vote: 'extra-그라운드시소' },
-    { area: '종로 · 동대문', name: '조계사', kind: '도심 사찰 · 무료', addr: '종로구 우정국로 55', hours: '경내 상시 개방', extra: '조계종 총본산 · 인사동 바로 옆 · 7/13 광장시장에서 택시 약 5분', url: NM + '조계사', alias: ['조계사'], vote: 'extra-조계사' },
-    { area: '종로 · 동대문', name: 'DDP 동대문디자인플라자', kind: '건축 · 전시', addr: '중구 을지로 281', hours: '10:00~20:00 (전시별 상이)', extra: '자하 하디드 건축 + 실내 전시·디자인 스토어', url: NM + '동대문디자인플라자', alias: ['ddp', '동대문'], vote: 'extra-ddp' }
+    { area: '용산 · 한남', emoji: '🎖️', name: '전쟁기념관', kind: '박물관 · 무료', addr: '용산구 이태원로 29', hours: '09:30~18:00 (입장 마감 17:30)', extra: '⚠️ 월요일 휴관 — 7/13은 불가, 7/14 가능 · 상설전시 무료 · 대규모 실내', url: NM + '전쟁기념관', alias: ['전쟁기념관'], vote: 'extra-전쟁기념관', to: '37.5369,126.9770' },
+    { area: '용산 · 한남', emoji: '🖼️', name: '리움미술관', kind: '미술관', addr: '용산구 이태원로55길 60-16 (한남동)', hours: '화~일 10:00~18:00', extra: '⚠️ 월요일 휴관 · 고미술 상설전 무료 · 사전 예약 권장 (14일 전 오픈, 현장 발권은 대기)', url: NM + '리움미술관', alias: ['리움'], vote: 'extra-리움미술관', to: '37.5384,126.9993' },
+    { area: '삼성 · 성수', emoji: '🪷', name: '봉은사', kind: '도심 사찰', addr: '강남구 봉은사로 531', hours: '', extra: '무료 · 코엑스(별마당 도서관)에서 도보 약 10분 — 7/14 오후 연계 가능', url: NM + '봉은사', alias: ['봉은사'], vote: 'extra-봉은사', to: '37.5148,127.0577' },
+    { area: '삼성 · 성수', emoji: '🎨', name: '그라운드시소 성수', kind: '전시 · 뮤지엄', addr: '성동구 아차산로17길 49 (생각공장 데시앙플렉스 B1)', hours: '', extra: '⚠️ 전시 교체형 — 진행 전시 홈페이지 확인 필수 · 성수동 카페거리 연계', url: NM + '그라운드시소 성수', alias: ['그라운드시소', '시소'], vote: 'extra-그라운드시소', to: '37.5467,127.0515' },
+    { area: '종로 · 동대문', emoji: '🙏', name: '조계사', kind: '도심 사찰 · 무료', addr: '종로구 우정국로 55', hours: '경내 상시 개방', extra: '조계종 총본산 · 인사동 바로 옆 · 7/13 광장시장에서 택시 약 5분', url: NM + '조계사', alias: ['조계사'], vote: 'extra-조계사', to: '37.5736,126.9818' },
+    { area: '종로 · 동대문', emoji: '🏙️', name: 'DDP 동대문디자인플라자', kind: '건축 · 전시', addr: '중구 을지로 281', hours: '10:00~20:00 (전시별 상이)', extra: '자하 하디드 건축 + 실내 전시·디자인 스토어', url: NM + '동대문디자인플라자', alias: ['ddp', '동대문'], vote: 'extra-ddp', to: '37.5665,127.0092' }
   ];
   var ALL_PLACES = PLACES.concat(EXTRAS);
 
@@ -1286,7 +1376,7 @@
         html += '<div class="pl-group"><h3>' + p.area + '</h3><div class="pl-rows">';
       }
       html += '<div class="pl-row">'
-        + '<div class="pl-name">' + p.name + ' <span class="pl-kind">' + p.kind + '</span></div>'
+        + '<div class="pl-name">' + (p.emoji ? p.emoji + ' ' : '') + p.name + ' <span class="pl-kind">' + p.kind + '</span></div>'
         + '<p class="pl-meta">' + p.addr
         + (p.hours ? '<br><span>' + p.hours + '</span>' : '')
         + (p.extra ? '<br><span>' + p.extra + '</span>' : '') + '</p>'
@@ -1295,6 +1385,7 @@
         + '<div class="pl-actions">'
         + (p.vote ? '<button type="button" class="btn-ghost btn-sm pl-vote" data-item="' + p.vote + '">가고 싶어요</button>' : '')
         + (p.url ? '<a class="btn-ghost btn-sm" href="' + p.url + '" target="_blank" rel="noopener">지도</a>' : '')
+        + (p.to ? '<a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/' + p.name + ',' + p.to + '" target="_blank" rel="noopener">길찾기</a>' : '')
         + '</div></div>'
         + '</div>';
     });
@@ -1305,8 +1396,11 @@
   renderPlaces();
   // '가고 싶어요' 버튼은 일정 탭·추가 장소 탭 어디에 있어도 동작
   document.addEventListener('click', function(e){
-    var b = e.target.closest ? e.target.closest('.pl-vote') : null;
-    if (b) { castWish(b.dataset.item); }
+    if (!e.target.closest) { return; }
+    var b = e.target.closest('.pl-vote');
+    if (b) { castWish(b.dataset.item); return; }
+    var c = e.target.closest('.chk-btn');
+    if (c) { castToggle(c.dataset.item, DONE); }
   });
 
   /* ---------- 여행 도우미 챗봇 (룰베이스) ---------- */
@@ -1345,7 +1439,7 @@
       return '<b>예약 팁</b><br>· 빛의 시어터: 네이버 예매 약 10% 할인, 결제 1시간 후 바코드 활성화 — 미리 예매!<br>· 꽃, 궁: 1일 전 예약 필요<br>· 쌤쌤쌤: 캐치테이블 원격 줄서기 권장';
     }
     if (s.indexOf('투표') !== -1) {
-      return '각 일정의 후보 카드를 누르면 투표돼요. 다른 카드를 누르면 변경!<br>득표 수와 투표한 사람 이름은 실시간으로 모두에게 보여요.';
+      return "'가고 싶어요' 버튼을 누르면 투표돼요. 한 번 더 누르면 취소!<br>몇 명이 눌렀는지, 누가 눌렀는지 실시간으로 모두에게 보여요.";
     }
     if (s.indexOf('13') !== -1 || s.indexOf('월요일') !== -1 || s.indexOf('첫날') !== -1) { return DAY13_TXT; }
     if (s.indexOf('14') !== -1 || s.indexOf('화요일') !== -1 || s.indexOf('둘째') !== -1 || s.indexOf('마지막') !== -1) { return DAY14_TXT; }
@@ -1392,6 +1486,75 @@
     if (e.key === 'Enter') { e.preventDefault(); $('#chatSend').click(); }
   });
 
+  /* ---------- 공유하기 ---------- */
+  var SHARE_URL = (location.protocol.indexOf('http') === 0)
+    ? location.origin + location.pathname
+    : 'https://seoul-wsbn.vercel.app/';
+  $('#shareBtn').addEventListener('click', function(){
+    if (navigator.share) {
+      navigator.share({ title: '서울 여행', text: '일정 확인하고 가고 싶은 곳에 투표해 주세요!', url: SHARE_URL }).catch(function(){});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(SHARE_URL).then(function(){
+        toast('링크가 복사됐어요 — 카톡에 붙여넣어 주세요!');
+      }, function(){ toast(SHARE_URL); });
+    } else {
+      toast(SHARE_URL);
+    }
+  });
+
+  /* ---------- D-day + 당일 모드 ---------- */
+  var TRIP_DATES = { d0713: '2026-07-13', d0714: '2026-07-14' };
+  function ymd(d){
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  var todayStr = ymd(new Date());
+  // D-day 표시
+  (function(){
+    var el = document.getElementById('heroEyebrow');
+    if (!el) { return; }
+    var diff = Math.ceil((new Date('2026-07-13T00:00:00') - new Date()) / 86400000);
+    if (todayStr === '2026-07-13' || todayStr === '2026-07-14') {
+      el.textContent += ' · 여행 중! 🧳';
+    } else if (diff > 0 && diff <= 30) {
+      el.textContent += ' · D-' + diff;
+    }
+  })();
+  // 여행 당일이면 해당 탭 자동 열기
+  if (todayStr === '2026-07-13') { showTab('d0713', false); }
+  if (todayStr === '2026-07-14') { showTab('d0714', false); }
+  // 지금 진행 중인 일정에 '지금' 표시
+  var NOW_SCHED = {
+    d0713: [[10, 13], [13, 14.5], [15, 18]],
+    d0714: [[10, 12], [12.5, 14], [14, 17.5], [18, 21], [21, 24]]
+  };
+  function markNow(){
+    Object.keys(NOW_SCHED).forEach(function(id){
+      var items = $all('#day-' + id + ' .tl-item');
+      items.forEach(function(li){
+        li.classList.remove('now');
+        var chip = $('.now-chip', li);
+        if (chip) { chip.parentNode.removeChild(chip); }
+      });
+      if (ymd(new Date()) !== TRIP_DATES[id]) { return; }
+      var now = new Date();
+      var h = now.getHours() + now.getMinutes() / 60;
+      NOW_SCHED[id].forEach(function(range, i){
+        if (h >= range[0] && h < range[1] && items[i]) {
+          items[i].classList.add('now');
+          var tm = $('.tl-time', items[i]);
+          if (tm) {
+            var chip = document.createElement('span');
+            chip.className = 'now-chip';
+            chip.textContent = '지금';
+            tm.appendChild(chip);
+          }
+        }
+      });
+    });
+  }
+  markNow();
+  setInterval(markNow, 5 * 60 * 1000);
+
   /* ---------- 날씨 (Open-Meteo) ---------- */
   var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast'
     + '?latitude=37.51&longitude=127.10'
@@ -1437,6 +1600,9 @@
         }
         if (lo !== null) { WX[t.date] = { lo: lo, hi: hi, pop: maxPop }; }
         $('#' + t.el).innerHTML = cells || '<p class="w-msg">해당 날짜의 예보가 아직 없어요.</p>';
+        if (maxPop != null && maxPop >= 60) {
+          $('#' + t.el).insertAdjacentHTML('afterend', '<p class="rain-note">☔ 강수확률 최대 ' + maxPop + '% — 우산 챙기세요!</p>');
+        }
       });
     })
     .catch(weatherFail);
