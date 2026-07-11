@@ -6,9 +6,9 @@
 <meta name="color-scheme" content="light dark">
 <meta name="description" content="서울 여행 7/13–14 — 일정 확인, 실시간 투표, 날씨·지도·예약 체크리스트까지 한 페이지에">
 <meta name="format-detection" content="telephone=no">
-<title>서울 여행</title>
+<title>어디갈까</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%B3%3C/text%3E%3C/svg%3E">
-<meta property="og:title" content="서울 여행">
+<meta property="og:title" content="어디갈까 — 서울 7/13–14">
 <meta property="og:description" content="일정 확인하고, 가고 싶은 곳에 투표해 주세요">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://seoul-wsbn.vercel.app/">
@@ -48,7 +48,7 @@
   /* ---------- hero: big tight headline, centered stack ---------- */
   .hero{background:var(--canvas);text-align:center;padding:72px 24px 60px}
   .hero .eyebrow{font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48)}
-  .hero h1{font-size:clamp(44px,13vw,56px);font-weight:600;line-height:1.07;letter-spacing:-0.28px;margin-top:10px}
+  .hero h1{font-size:clamp(48px,14vw,68px);font-weight:600;line-height:1.05;letter-spacing:-0.28px;margin-top:10px}
   .hero .lead{font-size:21px;font-weight:400;line-height:1.33;letter-spacing:-0.374px;color:var(--ink-80);margin-top:14px}
   .hero .cta{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .voter{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:32px}
@@ -359,15 +359,41 @@
   }
   .toast.on{display:block}
 
+  /* ---------- 한강 여정 지도 (히어로 SVG) ---------- */
+  .journey{width:min(440px,100%);margin:26px auto 0;display:block}
+  .journey .river{fill:none;stroke:var(--primary);opacity:.10;stroke-width:18;stroke-linecap:round}
+  .journey .route{
+    fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;
+    stroke-dasharray:1;stroke-dashoffset:1;
+    animation:draw 2.2s .5s ease forwards;
+  }
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .journey .dot{
+    fill:var(--primary);opacity:0;
+    transform-box:fill-box;transform-origin:center;
+    animation:dotin .35s ease forwards;
+  }
+  @keyframes dotin{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+  .journey .lbl{
+    fill:var(--ink-48);font-size:10px;font-weight:600;letter-spacing:-0.1px;
+    opacity:0;animation:lblin .5s ease forwards;
+  }
+  @keyframes lblin{to{opacity:1}}
+  @media (prefers-reduced-motion: reduce){
+    .journey .route{animation:none;stroke-dasharray:none;stroke-dashoffset:0}
+    .journey .dot,.journey .lbl{animation:none;opacity:1}
+  }
+
   /* ---------- 히어로 등장 시퀀스 ---------- */
   @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   .hero > *{opacity:0;animation:rise .55s ease forwards}
   .hero .eyebrow{animation-delay:0s}
   .hero h1{animation-delay:.07s}
   .hero .lead{animation-delay:.14s}
-  .hero .cta{animation-delay:.21s}
-  .hero .voter{animation-delay:.28s}
-  .hero .ptc{animation-delay:.35s}
+  .hero .journey{animation-delay:.2s}
+  .hero .cta{animation-delay:.28s}
+  .hero .voter{animation-delay:.34s}
+  .hero .ptc{animation-delay:.4s}
   @media (prefers-reduced-motion: reduce){.hero > *{opacity:1;animation:none}}
 
   /* ---------- 확정 모드 ---------- */
@@ -401,13 +427,29 @@
 </head>
 <body>
 
-<nav class="gnav" aria-label="상단"><span>서울 여행</span></nav>
+<nav class="gnav" aria-label="상단"><span>어디갈까</span></nav>
 
 <!-- ===================== hero ===================== -->
 <header class="hero">
   <p class="eyebrow" id="heroEyebrow">2026. 7. 13 – 7. 14 · 서울</p>
-  <h1>서울 여행</h1>
+  <h1>어디갈까</h1>
   <p class="lead">일정 확인하고,<br>가고 싶은 곳에 투표해 주세요.</p>
+  <svg class="journey" viewBox="0 0 360 175" aria-hidden="true">
+    <path class="river" d="M-10,100 C60,80 130,118 190,96 S300,58 370,80"/>
+    <path class="route" pathLength="1" d="M44,112 C70,118 100,108 122,96 C150,80 186,52 200,66 C210,80 205,128 212,140 C226,150 240,128 262,118 C286,107 301,86 313,62"/>
+    <circle class="dot" cx="44" cy="112" r="5" style="animation-delay:.7s"/>
+    <circle class="dot" cx="122" cy="96" r="5" style="animation-delay:1.05s"/>
+    <circle class="dot" cx="200" cy="66" r="5" style="animation-delay:1.4s"/>
+    <circle class="dot" cx="212" cy="140" r="5" style="animation-delay:1.75s"/>
+    <circle class="dot" cx="262" cy="118" r="5" style="animation-delay:2.1s"/>
+    <circle class="dot" cx="313" cy="62" r="5" style="animation-delay:2.45s"/>
+    <text class="lbl" x="44" y="134" text-anchor="middle" style="animation-delay:.85s">여의도</text>
+    <text class="lbl" x="122" y="86" text-anchor="middle" style="animation-delay:1.2s">용산</text>
+    <text class="lbl" x="200" y="54" text-anchor="middle" style="animation-delay:1.55s">성수</text>
+    <text class="lbl" x="212" y="160" text-anchor="middle" style="animation-delay:1.9s">삼성</text>
+    <text class="lbl" x="262" y="138" text-anchor="middle" style="animation-delay:2.25s">잠실</text>
+    <text class="lbl" x="313" y="50" text-anchor="middle" style="animation-delay:2.6s">워커힐</text>
+  </svg>
   <div class="cta">
     <a class="btn-fill" href="#tabbar">일정 보기</a>
     <button type="button" class="btn-ghost" id="shareBtn">공유하기</button>
@@ -607,6 +649,7 @@
               <div class="mh"><span class="mh-ico">🛍️</span><div><div class="mh-name">5층 실내 정원 사운즈 포레스트</div><div class="mh-price">입장 무료</div></div></div>
               <p class="opt-desc">서울 최대 규모 백화점. 전관 실내 냉방, 지하 식품관 구경만으로도 반나절. 사촌동생(영등포 거주) 합류 동선 최적</p>
               <p class="opt-meta">영등포구 여의대로 108 · 이촌 → 여의도 택시 약 15~20분</p>
+              <p class="opt-meta">🚢 귀가 팁: 여의도 선착장 → 잠실 한강버스 (성인 3,000원 · 배차 약 1시간)</p>
               <div class="mimo"><div class="avatar">🤳</div><div class="bubble">5층 실내 정원 '사운즈 포레스트'가 대표 포토스팟이에요<span class="src">방문 후기 요약</span></div></div>
               <div class="opt-foot">
                 <span class="tally" data-tally></span>
@@ -1000,6 +1043,7 @@
   var pollTimer = null;
   var activeTab = 'd0713';
   var WX = null;            // 날씨 요약 (챗봇용)
+  var partyDone = false;    // 전원 참여 콘페티 1회 제한
 
   /* ---------- 유틸 ---------- */
   function $(sel, root){ return (root || document).querySelector(sel); }
@@ -1152,6 +1196,7 @@
     votes = votes.filter(function(v){ return v.item_id !== itemId; });
     votes.push({ voter_name: '연정', item_id: itemId, choice: choice });
     renderVotes();
+    if (choice !== '취소') { confetti(); }
     upsertVote({ voter_name: '연정', item_id: itemId, choice: choice }).catch(function(){
       toast('저장에 실패했어요 — 다시 눌러주세요.');
       fetchVotes();
@@ -1247,6 +1292,7 @@
       var extraN = Object.keys(seen).filter(function(n){ return VOTERS.indexOf(n) === -1; }).length;
       if (missing.length === 0) {
         pEl.textContent = '🎉 ' + (4 + extraN) + '명 모두 투표 참여 완료!';
+        if (!partyDone) { partyDone = true; confetti(); }
       } else {
         pEl.textContent = '투표 참여 ' + (doneN.length + extraN) + '명 · 아직 안 한 사람: ' + missing.join(', ');
       }
@@ -1336,6 +1382,7 @@
     { name: '봉은사', sub: '삼성 · 코엑스 도보 10분', lat: 37.5148, lng: 127.0577, url: NM + '봉은사' },
     { name: '그라운드시소 성수', sub: '성수 · 진행 전시 확인', lat: 37.5467, lng: 127.0515, url: NM + '그라운드시소 성수' },
     { name: '조계사', sub: '종로 · 광장시장 택시 5분', lat: 37.5736, lng: 126.9818, url: NM + '조계사' },
+    { name: '한강버스 여의도선착장', sub: '이동수단 · 잠실행 배', lat: 37.5285, lng: 126.9345, url: NM + '한강버스 여의도선착장' },
     { name: 'DDP 동대문디자인플라자', sub: '동대문 · 실내 전시', lat: 37.5665, lng: 127.0092, url: NM + '동대문디자인플라자' }
   ]};
 
@@ -1503,7 +1550,8 @@
     { area: '삼성 · 성수', emoji: '🪷', name: '봉은사', kind: '도심 사찰', addr: '강남구 봉은사로 531', hours: '', extra: '무료 · 코엑스(별마당 도서관)에서 도보 약 10분 — 7/14 오후 연계 가능', url: NM + '봉은사', alias: ['봉은사'], vote: 'extra-봉은사', to: '37.5148,127.0577' },
     { area: '삼성 · 성수', emoji: '🎨', name: '그라운드시소 성수', kind: '전시 · 뮤지엄', addr: '성동구 아차산로17길 49 (생각공장 데시앙플렉스 B1)', hours: '', extra: '⚠️ 전시 교체형 — 진행 전시 홈페이지 확인 필수 · 성수동 카페거리 연계', url: NM + '그라운드시소 성수', alias: ['그라운드시소', '시소'], vote: 'extra-그라운드시소', to: '37.5467,127.0515' },
     { area: '종로 · 동대문', emoji: '🙏', name: '조계사', kind: '도심 사찰 · 무료', addr: '종로구 우정국로 55', hours: '경내 상시 개방', extra: '조계종 총본산 · 인사동 바로 옆 · 7/13 광장시장에서 택시 약 5분', url: NM + '조계사', alias: ['조계사'], vote: 'extra-조계사', to: '37.5736,126.9818' },
-    { area: '종로 · 동대문', emoji: '🏙️', name: 'DDP 동대문디자인플라자', kind: '건축 · 전시', addr: '중구 을지로 281', hours: '10:00~20:00 (전시별 상이)', extra: '자하 하디드 건축 + 실내 전시·디자인 스토어', url: NM + '동대문디자인플라자', alias: ['ddp', '동대문'], vote: 'extra-ddp', to: '37.5665,127.0092' }
+    { area: '종로 · 동대문', emoji: '🏙️', name: 'DDP 동대문디자인플라자', kind: '건축 · 전시', addr: '중구 을지로 281', hours: '10:00~20:00 (전시별 상이)', extra: '자하 하디드 건축 + 실내 전시·디자인 스토어', url: NM + '동대문디자인플라자', alias: ['ddp', '동대문'], vote: 'extra-ddp', to: '37.5665,127.0092' },
+    { area: '이동수단', emoji: '🚢', name: '한강버스', kind: '수상 대중교통', addr: '여의도 ↔ 압구정 · 옥수 · 뚝섬 ↔ 잠실 (동부 노선)', hours: '배차 약 1시간 간격 — 시간표 hgbus.co.kr 확인', extra: '성인 편도 3,000원 · 7/13 더현대(여의도) → 잠실 복귀를 한강 유람 겸 배로!', url: NM + '한강버스 여의도선착장', alias: ['한강버스', '리버버스', '배', '유람선'], vote: 'extra-한강버스', to: '37.5285,126.9345' }
   ];
   var ALL_PLACES = PLACES.concat(EXTRAS);
 
@@ -1637,7 +1685,7 @@
     : 'https://seoul-wsbn.vercel.app/';
   $('#shareBtn').addEventListener('click', function(){
     if (navigator.share) {
-      navigator.share({ title: '서울 여행', text: '일정 확인하고 가고 싶은 곳에 투표해 주세요!', url: SHARE_URL }).catch(function(){});
+      navigator.share({ title: '어디갈까', text: '서울 7/13–14 일정 보고 가고 싶은 곳에 투표해 주세요!', url: SHARE_URL }).catch(function(){});
     } else if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(SHARE_URL).then(function(){
         toast('링크가 복사됐어요 — 카톡에 붙여넣어 주세요!');
@@ -1737,6 +1785,49 @@
     return '<b>지금 1위 현황</b><br>' + rs.map(function(r){ return '· ' + r.label + ': ' + r.text; }).join('<br>');
   }
   renderResults();
+
+  /* ---------- 콘페티 (확정·전원 참여 축하) ---------- */
+  function confetti(){
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    if (!document.body || !window.requestAnimationFrame) { return; }
+    var c = document.createElement('canvas');
+    c.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:200';
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+    document.body.appendChild(c);
+    var ctx = c.getContext('2d');
+    var COLORS = ['#0066cc', '#2997ff', '#1d1d1f', '#f5f5f7', '#ffd60a'];
+    var ps = [];
+    for (var i = 0; i < 90; i++) {
+      ps.push({
+        x: c.width / 2 + (Math.random() - 0.5) * 180,
+        y: c.height * 0.35,
+        vx: (Math.random() - 0.5) * 9,
+        vy: -(4 + Math.random() * 7),
+        r: 3 + Math.random() * 4,
+        a: Math.random() * Math.PI,
+        va: (Math.random() - 0.5) * 0.3,
+        col: COLORS[i % COLORS.length]
+      });
+    }
+    var t0 = null;
+    function step(ts){
+      if (t0 === null) { t0 = ts; }
+      ctx.clearRect(0, 0, c.width, c.height);
+      ps.forEach(function(p){
+        p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.a += p.va;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.a);
+        ctx.fillStyle = p.col;
+        ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+        ctx.restore();
+      });
+      if (ts - t0 < 1800) { window.requestAnimationFrame(step); }
+      else if (c.parentNode) { c.parentNode.removeChild(c); }
+    }
+    window.requestAnimationFrame(step);
+  }
 
   /* ---------- 모바일 스와이프 탭 전환 ---------- */
   (function(){
