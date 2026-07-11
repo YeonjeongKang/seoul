@@ -643,15 +643,34 @@
 
         <li class="tl-item">
           <div class="tl-time">12:30~14:00</div>
-          <div class="tl-label">점심 — 롯데월드몰 후보 3곳 <span class="badge">투표</span></div>
+          <div class="tl-label">점심 — 롯데월드몰 후보 4곳 <span class="badge">투표</span></div>
           <div class="options" data-item="vote-0714-lunch">
+
+            <div class="option" role="button" tabindex="0" data-choice="치즈룸 X 테이스팅룸">
+              <div class="opt-top">
+                <div class="opt-name">치즈룸 X 테이스팅룸 <span class="opt-kind">이탈리안 · 치즈</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <div class="mh"><span class="mh-ico">🧀</span><div><div class="mh-name">시금치 플랫브레드 29,000원</div><div class="mh-price">트러플 파케리 파스타 26,000원 · 산세바스찬 치즈케이크 9,800원</div></div></div>
+              <p class="opt-desc">17가지 치즈로 요리하는 이탈리안. 플레이팅 예쁘고 분위기·채광 좋음 (가격대는 높은 편)</p>
+              <p class="opt-meta">송파구 올림픽로 300 (롯데월드몰 5층) · 매일 10:30~22:00 · 캐치테이블 예약 권장</p>
+              <div class="mimo"><div class="avatar">🤤</div><div class="bubble">치즈케이크 한 조각에 거의 만원인데... 진짜 맛있어요!<span class="src">다이닝코드 4.2점 · 방문 후기</span></div></div>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <div class="pl-actions">
+                  <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-치즈룸">가고 싶어요</button>
+                  <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/치즈룸 롯데월드몰" target="_blank" rel="noopener">지도</a>
+                  <a class="btn-ghost btn-sm" href="https://map.kakao.com/link/to/치즈룸,37.5126,127.1035" target="_blank" rel="noopener">길찾기</a>
+                </div>
+              </div>
+            </div>
 
             <div class="option" role="button" tabindex="0" data-choice="쌤쌤쌤 롯데월드몰점">
               <div class="opt-top">
                 <div class="opt-name">쌤쌤쌤 롯데월드몰점 <span class="opt-kind">양식</span></div>
                 <span class="opt-mine">✓ 내 선택</span>
               </div>
-              <div class="mh"><span class="mh-ico">🧀</span><div><div class="mh-name">클래식 라자냐 26,000원</div><div class="mh-price">버섯뇨끼 23,000원 · 철판스테이크 46,000원</div></div></div>
+              <div class="mh"><span class="mh-ico">🥩</span><div><div class="mh-name">클래식 라자냐 26,000원</div><div class="mh-price">버섯뇨끼 23,000원 · 철판스테이크 46,000원</div></div></div>
               <p class="opt-desc">흑백요리사 출연 셰프 매장, 롤라자냐 시그니처</p>
               <p class="opt-meta">송파구 올림픽로 300 (롯데월드몰 5층) · 캐치테이블 원격 줄서기 권장</p>
               <div class="mimo"><div class="avatar">🧑‍🍳</div><div class="bubble">흑백요리사 셰프 매장이라 웨이팅이 길어요 — 원격 줄서기 필수!<span class="src">구글 4.9점 · 리뷰 6,906개</span></div></div>
@@ -1207,6 +1226,7 @@
     ]},
     d0714: { el: 'map-d0714', map: null, spots: [
       { pin: '1', name: '빛의 시어터', sub: '10:00~12:00', lat: 37.5551, lng: 127.1100, url: NM + '빛의시어터' },
+      { name: '치즈룸 X 테이스팅룸', sub: '점심 후보', lat: 37.5126, lng: 127.1035, url: NM + '치즈룸 롯데월드몰' },
       { name: '쌤쌤쌤 롯데월드몰점', sub: '점심 후보', lat: 37.5127, lng: 127.1022, url: NM + '쌤쌤쌤 롯데월드몰' },
       { name: '꽃, 궁', sub: '점심 후보', lat: 37.5123, lng: 127.1031, url: NM + '꽃궁 롯데월드몰' },
       { name: '분지로', sub: '점심 후보', lat: 37.5119, lng: 127.1025, url: NM + '분지로 롯데월드몰' },
@@ -1343,7 +1363,8 @@
     { area: '여의도 · 종로 — 7/13 오후 후보', name: '더현대 서울', kind: '백화점', addr: '영등포구 여의대로 108', hours: '', extra: "5층 '사운즈 포레스트' 포토스팟 · 지하 식품관(바오서울·쬬쬬·릴버거)", url: NM + '더현대서울', alias: ['더현대', '현대백화점', '식품관'] },
     { area: '여의도 · 종로 — 7/13 오후 후보', name: '광장시장', kind: '전통시장', addr: '종로구 창경궁로 88', hours: '', extra: '빈대떡·마약김밥·육회 · 냉방 약함', url: NM + '광장시장', alias: ['광장'] },
     { area: '광진 — 7/14', name: '빛의 시어터', kind: '몰입형 미디어아트', addr: '광진구 워커힐로 177, 워커힐 호텔 B1', hours: '매일 10:00~ (마감 시즌별 상이)', extra: '성인 29,000원 · 네이버 예매 약 10% 할인 — 미리 예매!', url: NM + '빛의시어터', alias: ['빛의', '시어터', '미디어아트', '워커힐'] },
-    { area: '잠실 · 석촌호수 — 7/14', name: '쌤쌤쌤 롯데월드몰점', kind: '양식 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '라자냐 26,000원 · 구글 4.9점 (리뷰 6,906개) · 캐치테이블 원격 줄서기 권장', url: NM + '쌤쌤쌤 롯데월드몰', alias: ['쌤쌤쌤', '샘샘샘'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '치즈룸 X 테이스팅룸', kind: '이탈리안 · 치즈 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰 5층)', hours: '매일 10:30~22:00', extra: '시금치 플랫브레드 29,000원 · 다이닝코드 4.2점 · 캐치테이블 예약 권장', url: NM + '치즈룸 롯데월드몰', alias: ['치즈룸', '테이스팅룸', '퍼프룸'] },
+    { area: '잠실 · 석촌호수 — 7/14', name: '쌤쌤쌤 롯데월드몰점', kind: '양식 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰 5층)', hours: '', extra: '라자냐 26,000원 · 구글 4.9점 (리뷰 6,906개) · 캐치테이블 원격 줄서기 권장', url: NM + '쌤쌤쌤 롯데월드몰', alias: ['쌤쌤쌤', '샘샘샘'] },
     { area: '잠실 · 석촌호수 — 7/14', name: '꽃, 궁', kind: '한정식 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '갈비 코스 (가격 예약 문의) · 구글 4.8점 (리뷰 217개) · 1일 전 예약 필요', url: NM + '꽃궁 롯데월드몰', alias: ['꽃궁'] },
     { area: '잠실 · 석촌호수 — 7/14', name: '분지로', kind: '돈카츠 · 점심 후보', addr: '송파구 올림픽로 300 (롯데월드몰)', hours: '', extra: '로스카츠 16,000원 · 구글 4.9점 (리뷰 996개) · 좌석 15석 내외', url: NM + '분지로 롯데월드몰', alias: ['분지로'] },
     { area: '잠실 · 석촌호수 — 7/14', name: '루반로즈', kind: '이탈리안 · 저녁 후보', addr: '송파구 석촌호수로 274', hours: '매일 11:00~15:00, 17:00~22:00', extra: '파스타 24,000~30,000원 · 구글 4.5점 (리뷰 175개) · 호수뷰 · 루프탑', url: NM + '루반로즈 석촌호수', alias: ['루반'] },
@@ -1405,7 +1426,7 @@
 
   /* ---------- 여행 도우미 챗봇 (룰베이스) ---------- */
   var DAY13_TXT = '<b>7/13 (월) — 용산 → 여의도</b><br>· 10:00 국립중앙박물관 (「우리들의 밥상」 특별전)<br>· 13:00 점심 투표: 백옥 / 스즈란테이 / 르미야<br>· 15:00 오후 투표: 더현대 서울 vs 광장시장<br>· 저녁은 자유 — 당일 결정!';
-  var DAY14_TXT = '<b>7/14 (화) — 광진 → 잠실 → 시내</b><br>· 10:00 빛의 시어터 (미리 예매!)<br>· 12:30 점심 투표: 쌤쌤쌤 / 꽃, 궁 / 분지로<br>· 14:00 오후 투표: 별마당 도서관 vs 성수동<br>· 18:00 저녁 투표: 루반로즈 / 마신내 / 세컨드포레스트<br>· 식후 석촌호수 야간 산책';
+  var DAY14_TXT = '<b>7/14 (화) — 광진 → 잠실 → 시내</b><br>· 10:00 빛의 시어터 (미리 예매!)<br>· 12:30 점심 투표: 치즈룸 / 쌤쌤쌤 / 꽃, 궁 / 분지로<br>· 14:00 오후 투표: 별마당 도서관 vs 성수동<br>· 18:00 저녁 투표: 루반로즈 / 마신내 / 세컨드포레스트<br>· 식후 석촌호수 야간 산책';
 
   function placeAnswer(p){
     var out = '<b>' + p.name + '</b> · ' + p.kind + '<br>주소: ' + p.addr;
@@ -1444,7 +1465,7 @@
     if (s.indexOf('13') !== -1 || s.indexOf('월요일') !== -1 || s.indexOf('첫날') !== -1) { return DAY13_TXT; }
     if (s.indexOf('14') !== -1 || s.indexOf('화요일') !== -1 || s.indexOf('둘째') !== -1 || s.indexOf('마지막') !== -1) { return DAY14_TXT; }
     if (s.indexOf('일정') !== -1 || s.indexOf('코스') !== -1) { return DAY13_TXT + '<br><br>' + DAY14_TXT; }
-    if (s.indexOf('점심') !== -1) { return '<b>점심 후보</b><br>· 7/13 이촌: 백옥 / 스즈란테이 / 르미야<br>· 7/14 롯데월드몰: 쌤쌤쌤 / 꽃, 궁 / 분지로<br>각 탭에서 투표해 주세요!'; }
+    if (s.indexOf('점심') !== -1) { return '<b>점심 후보</b><br>· 7/13 이촌: 백옥 / 스즈란테이 / 르미야<br>· 7/14 롯데월드몰: 치즈룸 / 쌤쌤쌤 / 꽃, 궁 / 분지로<br>각 탭에서 투표해 주세요!'; }
     if (s.indexOf('저녁') !== -1) { return '<b>저녁 후보</b><br>· 7/13: 자유 — 당일 결정<br>· 7/14 석촌호수: 루반로즈 / 마신내 / 세컨드포레스트 (투표!)'; }
     if (s.indexOf('주소') !== -1 || s.indexOf('어디') !== -1) { return '장소 이름으로 물어보시면 주소를 알려드릴게요.<br>예: "백옥", "빛의 시어터", "별마당"'; }
     if (s.indexOf('안녕') !== -1 || s.indexOf('하이') !== -1) { return '안녕하세요! 일정·날씨·장소·예약, 뭐든 물어보세요 😊'; }
