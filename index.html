@@ -5,959 +5,1019 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="format-detection" content="telephone=no">
-<title>서울 가족여행 7.12–7.15 · 코스 투표</title>
-<meta property="og:title" content="서울 가족여행 7.12–7.15 · 코스 투표">
-<meta property="og:description" content="추천 코스 보고, 마음에 드는 식당·전시에 투표해 주세요!">
+<title>서울 여행</title>
+<meta property="og:title" content="서울 여행">
+<meta property="og:description" content="일정 확인하고, 가고 싶은 곳에 투표해 주세요">
 <meta property="og:type" content="website">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root{
-    --ink:#1d1d1f; --muted:#6e6e73; --hair:#e0e0e0;
-    --bg:#ffffff; --bg-alt:#f5f5f7;
-    --accent:#0066cc; --selected:#0071e3;
+    --primary:#0066cc;
+    --primary-focus:#0071e3;
+    --ink:#1d1d1f;
+    --ink-80:#333333;
+    --ink-48:#7a7a7a;
+    --on-dark:#ffffff;
+    --muted-on-dark:#cccccc;
+    --hairline:#e0e0e0;
+    --divider:#f0f0f0;
+    --canvas:#ffffff;
+    --parchment:#f5f5f7;
+    --pearl:#fafafc;
+    --tile-1:#272729;
+    --tile-2:#2a2a2c;
+    --nav-black:#000000;
   }
-  *,*::before,*::after{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  html,body{margin:0;padding:0}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
   body{
-    background:var(--bg); color:var(--ink);
-    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",Pretendard,"Noto Sans KR","Malgun Gothic",Inter,sans-serif;
-    font-size:17px; font-weight:400; line-height:1.47;
-    word-break:keep-all; overflow-wrap:break-word;
-    -webkit-text-size-adjust:100%;
+    background:var(--canvas);
+    color:var(--ink);
+    font-family:"SF Pro Text","SF Pro Display",system-ui,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+    font-size:17px;font-weight:400;line-height:1.47;letter-spacing:-0.374px;
+    word-break:keep-all;overflow-wrap:break-word;
   }
-  .wrap{max-width:680px;margin:0 auto;padding:0 20px}
-  a{color:var(--accent);text-decoration:none}
-  h1,h2,h3,h4{font-weight:600;margin:0}
-  b,strong{font-weight:600}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto}
-    *,*::before,*::after{transition:none!important;animation:none!important}
-  }
+  .inner{max-width:720px;margin:0 auto;padding:0 20px}
 
-  /* ---------- hero ---------- */
-  .hero{background:var(--bg);padding:64px 0 56px;text-align:left}
-  .hero .eyebrow{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--accent);letter-spacing:.02em}
-  .hero h1{font-size:clamp(32px,8.5vw,46px);line-height:1.15;letter-spacing:-.02em}
-  .hero p.lede{margin:16px 0 0;color:var(--muted);font-size:17px;max-width:32em}
+  /* ---------- global nav (true black, 44px) ---------- */
+  .gnav{background:var(--nav-black);height:44px;display:flex;align-items:center;justify-content:center}
+  .gnav span{color:var(--on-dark);font-size:12px;letter-spacing:-0.12px}
 
-  /* ---------- summary cards ---------- */
-  .summary{background:var(--bg-alt);padding:56px 0 64px}
-  .summary h2{font-size:24px;letter-spacing:-.02em;margin:0 0 20px}
-  .sum-grid{display:flex;flex-direction:column;gap:12px}
-  .sum-card{
-    display:block;width:100%;text-align:left;cursor:pointer;
-    background:var(--bg);border:1px solid var(--hair);border-radius:18px;
-    padding:20px 22px;font-family:inherit;color:var(--ink);
-    transition:transform .12s ease;
-  }
-  .sum-card:active{transform:scale(.95)}
-  .sum-date{display:block;font-size:14px;font-weight:600;color:var(--accent)}
-  .sum-title{display:block;font-size:19px;font-weight:600;letter-spacing:-.01em;margin:4px 0 4px;line-height:1.3}
-  .sum-spots{display:block;font-size:15px;color:var(--muted);margin:0;line-height:1.47}
-  .sum-note{
-    margin:16px 0 0;padding:16px 22px;border-radius:18px;
-    border:1px solid var(--hair);background:var(--bg);
-    font-size:15px;color:var(--muted);
-  }
-  .sum-note b{color:var(--ink);font-weight:600}
+  /* ---------- hero: big tight headline, centered stack ---------- */
+  .hero{background:var(--canvas);text-align:center;padding:72px 24px 60px}
+  .hero .eyebrow{font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48)}
+  .hero h1{font-size:clamp(44px,13vw,56px);font-weight:600;line-height:1.07;letter-spacing:-0.28px;margin-top:10px}
+  .hero .lead{font-size:21px;font-weight:400;line-height:1.33;letter-spacing:-0.374px;color:var(--ink-80);margin-top:14px}
+  .hero .cta{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .voter{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:32px}
+  .voter .who{font-size:14px;letter-spacing:-0.224px;color:var(--ink-48)}
+  .voter .who strong{font-weight:600;color:var(--ink)}
 
-  /* ---------- sticky tabs ---------- */
-  .tabbar{
-    position:sticky;top:0;z-index:100;
-    background:rgba(245,245,247,.8);
-    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  }
-  .tabbar .wrap{display:flex;gap:8px;align-items:center;padding-top:10px;padding-bottom:10px}
-  .tab{
-    flex:1;min-height:52px;cursor:pointer;font-family:inherit;
-    background:transparent;border:none;border-radius:9999px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
-    color:var(--ink);transition:transform .12s ease;
-  }
-  .tab:active{transform:scale(.95)}
-  .tab .t-num{font-size:16px;font-weight:600;letter-spacing:-.01em}
-  .tab .t-sub{font-size:12px;color:var(--muted)}
-  .tab.on{background:var(--accent);color:#fff}
-  .tab.on .t-sub{color:#fff}
-  .voter-chip{
-    flex:none;min-width:44px;min-height:44px;cursor:pointer;font-family:inherit;
-    border:1px solid var(--hair);background:var(--bg);border-radius:9999px;
-    padding:0 14px;font-size:14px;font-weight:600;color:var(--ink);
-    transition:transform .12s ease;
-  }
-  .voter-chip:active{transform:scale(.95)}
-
-  .notice{
-    background:var(--bg-alt);
-    font-size:13.5px;color:var(--muted);
-  }
-  .notice .wrap{padding-top:10px;padding-bottom:10px}
-
-  /* ---------- day panels ---------- */
-  .panel[hidden]{display:none}
-  .day-head{background:var(--bg);padding:56px 0 40px}
-  .day-head .eyebrow{margin:0 0 8px;font-size:14px;font-weight:600;color:var(--accent);letter-spacing:.02em}
-  .day-head h2{font-size:clamp(26px,6.5vw,32px);letter-spacing:-.02em;line-height:1.2}
-  .day-head .sub{margin:12px 0 0;color:var(--muted);font-size:16px;max-width:34em}
-
-  /* ---------- weather ---------- */
-  .wx{background:var(--bg-alt);padding:48px 0}
-  .wx h3{font-size:20px;letter-spacing:-.01em;margin:0 0 4px}
-  .wx .src{font-size:13px;color:var(--muted);margin:0 0 16px}
-  .wx-strip{
-    display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;
-  }
-  .wx-strip::-webkit-scrollbar{display:none}
-  .wx-chip{
-    flex:none;width:64px;padding:12px 6px;text-align:center;
-    background:var(--bg);border:1px solid var(--hair);border-radius:18px;
-    display:flex;flex-direction:column;gap:3px;
-  }
-  .wx-chip .wx-h{font-size:12px;color:var(--muted)}
-  .wx-chip .wx-t{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
-  .wx-chip .wx-p{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-  .wx-chip.rainy .wx-p{color:var(--accent);font-weight:600}
-  .wx-err{margin:0;font-size:15px;color:var(--muted)}
-
-  /* ---------- timeline ---------- */
-  .course{background:var(--bg);padding:48px 0 64px}
-  .course h3{font-size:20px;letter-spacing:-.01em;margin:0 0 24px}
-  .tl-move{
-    position:relative;text-align:center;
-    padding:26px 16px;margin:0;
-    font-size:14px;color:var(--muted);line-height:1.5;
-  }
-  .tl-move::before,.tl-move::after{
-    content:"";position:absolute;left:50%;width:1px;height:12px;background:var(--hair);
-  }
-  .tl-move::before{top:4px}
-  .tl-move::after{bottom:4px}
-
-  .place{
-    background:var(--bg);border:1px solid var(--hair);border-radius:18px;
-    padding:24px 22px;
-  }
-  .place .when{margin:0 0 6px;font-size:14px;font-weight:600;color:var(--accent)}
-  .place h4{font-size:21px;letter-spacing:-.01em;line-height:1.25;margin:0 0 10px}
-  .place .desc{margin:0 0 14px;font-size:16px}
-  .facts{margin:0 0 14px;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
-  .facts li{font-size:14.5px;color:var(--muted)}
-  .facts li b{color:var(--ink);font-weight:600}
-  .quote{
-    margin:0 0 14px;padding:12px 16px;border-radius:18px;background:var(--bg-alt);
-    font-size:14.5px;color:var(--ink);line-height:1.5;
-  }
-  .tips{margin:0 0 16px;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
-  .tips li{font-size:14.5px;color:var(--muted);padding-left:24px;position:relative;line-height:1.5}
-  .tips li::before{content:"💡";position:absolute;left:0}
-  .tips li.warn::before{content:"⚠️"}
-  .cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-  .pill{
+  /* ---------- buttons: pill grammar only ---------- */
+  .btn-fill{
     display:inline-flex;align-items:center;justify-content:center;
     min-height:44px;padding:11px 22px;border-radius:9999px;
-    background:var(--accent);color:#fff;font-size:15px;font-weight:600;
-    transition:transform .12s ease;border:none;cursor:pointer;font-family:inherit;
+    background:var(--primary);border:none;color:#fff;
+    font-family:inherit;font-size:17px;font-weight:400;letter-spacing:-0.374px;
+    cursor:pointer;text-decoration:none;transition:transform .15s ease;
   }
-  .pill:active{transform:scale(.95)}
-  .textlink{font-size:15px;font-weight:600;padding:11px 6px;min-height:44px;display:inline-flex;align-items:center}
-
-  /* ---------- vote ---------- */
-  .vote{margin:0}
-  .vote-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 4px}
-  .vote-head h4{font-size:20px;letter-spacing:-.01em}
-  .vote-head .when-chip{font-size:14px;font-weight:600;color:var(--accent)}
-  .vhint{font-size:13px;color:var(--muted)}
-  .vnote{margin:6px 0 14px;font-size:14.5px;color:var(--muted)}
-  .choices{display:flex;flex-direction:column;gap:12px}
-  .choice{
-    position:relative;
-    background:var(--bg);border:1px solid var(--hair);border-radius:18px;
-    padding:18px 20px 18px 56px;cursor:pointer;min-height:44px;
-    transition:transform .12s ease;
-  }
-  .choice::before{
-    content:"";position:absolute;left:20px;top:20px;width:22px;height:22px;
-    border-radius:50%;border:2px solid var(--hair);
-  }
-  .choice::after{
-    content:"";position:absolute;left:26px;top:26px;width:10px;height:10px;
-    border-radius:50%;background:transparent;
-  }
-  .choice:active{transform:scale(.95)}
-  .choice.selected{border:2px solid var(--selected);padding:17px 19px 17px 55px}
-  .choice.selected::before{border-color:var(--selected);left:19px;top:19px}
-  .choice.selected::after{background:var(--selected);left:25px;top:25px}
-  .c-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-  .c-name{font-size:18px;font-weight:600;letter-spacing:-.01em}
-  .c-count{flex:none;font-size:14px;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
-  .c-meta{margin:3px 0 0;font-size:14px;color:var(--muted)}
-  .c-desc{margin:8px 0 0;font-size:14.5px;line-height:1.5}
-  .c-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
-  .c-who{font-size:13.5px;color:var(--muted);min-height:1em}
-  .c-who:empty::before{content:"아직 투표 없음";color:var(--muted)}
-  .maplink{
-    flex:none;display:inline-flex;align-items:center;justify-content:center;
+  .btn-ghost{
+    display:inline-flex;align-items:center;justify-content:center;
     min-height:44px;padding:11px 22px;border-radius:9999px;
-    background:var(--accent);color:#fff;font-size:14px;font-weight:600;
-    transition:transform .12s ease;
+    background:transparent;border:1px solid var(--primary);color:var(--primary);
+    font-family:inherit;font-size:17px;font-weight:400;letter-spacing:-0.374px;
+    cursor:pointer;text-decoration:none;transition:transform .15s ease;
   }
-  .maplink:active{transform:scale(.95)}
-  .vote.confirm .choice{padding:16px 20px 16px 56px}
-  .vote.confirm .choice.selected{padding:15px 19px 15px 55px}
-  .vote.confirm .c-name{font-size:17px}
+  .btn-sm{min-height:44px;padding:8px 18px;font-size:14px;letter-spacing:-0.224px}
+  .btn-fill:active,.btn-ghost:active{transform:scale(0.95)}
+  .btn-fill:focus-visible,.btn-ghost:focus-visible{outline:2px solid var(--primary-focus);outline-offset:2px}
 
-  .block-gap{height:40px}
-
-  /* ---------- day confirm section ---------- */
-  .confirm-sect{background:var(--bg-alt);padding:48px 0 64px}
-  .confirm-sect h3{font-size:20px;letter-spacing:-.01em;margin:0 0 6px}
-  .confirm-sect p{margin:0 0 16px;font-size:15px;color:var(--muted)}
-
-  /* ---------- checklist / footer ---------- */
-  .check{background:var(--bg);padding:56px 0 64px}
-  .check h2{font-size:24px;letter-spacing:-.02em;margin:0 0 8px}
-  .check p.sub{margin:0 0 20px;font-size:15px;color:var(--muted)}
-  .check ol{margin:0;padding:0;list-style:none;counter-reset:n;display:flex;flex-direction:column;gap:10px}
-  .check ol li{
-    counter-increment:n;position:relative;
-    background:var(--bg);border:1px solid var(--hair);border-radius:18px;
-    padding:16px 18px 16px 56px;font-size:15px;line-height:1.5;
+  /* ---------- summary band (parchment) ---------- */
+  .summary-band{background:var(--parchment);padding:56px 0 64px}
+  .summary-band .band-title{text-align:center;font-size:28px;font-weight:600;line-height:1.14;letter-spacing:-0.374px}
+  .summary-band .band-sub{text-align:center;font-size:14px;letter-spacing:-0.224px;color:var(--ink-48);margin-top:8px}
+  .summary{display:grid;grid-template-columns:1fr;gap:14px;margin-top:28px}
+  @media (min-width:560px){.summary{grid-template-columns:1fr 1fr}}
+  .sum-card{
+    background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;
+    padding:24px;text-align:left;cursor:pointer;font-family:inherit;
+    letter-spacing:-0.224px;transition:transform .15s ease;min-height:44px;
   }
-  .check ol li::before{
-    content:counter(n);position:absolute;left:18px;top:16px;
-    width:26px;height:26px;border-radius:50%;
-    background:var(--accent);color:#fff;font-size:13px;font-weight:600;
-    display:flex;align-items:center;justify-content:center;
+  .sum-card:active{transform:scale(0.95)}
+  .sum-card:focus-visible{outline:2px solid var(--primary-focus);outline-offset:2px}
+  .sum-card .d{font-size:14px;font-weight:600;color:var(--ink-48)}
+  .sum-card .r{font-size:21px;font-weight:600;letter-spacing:-0.374px;margin-top:8px;line-height:1.19}
+  .sum-card .s{font-size:14px;color:var(--ink-48);margin-top:8px;line-height:1.43}
+  .sum-card .go{display:inline-block;margin-top:14px;font-size:14px;color:var(--primary)}
+
+  /* ---------- sticky frosted tab bar ---------- */
+  .tabbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(245,245,247,0.8);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--hairline);
   }
-  footer{background:var(--bg-alt);padding:48px 0 72px;font-size:13.5px;color:var(--muted);line-height:1.7}
+  .tabbar .row{max-width:720px;margin:0 auto;display:flex;gap:8px;padding:10px 20px}
+  .tab{
+    flex:1;min-height:44px;border:none;border-radius:9999px;background:transparent;
+    font-family:inherit;font-size:17px;font-weight:400;letter-spacing:-0.374px;color:var(--ink);
+    cursor:pointer;transition:transform .15s ease;
+  }
+  .tab:active{transform:scale(0.95)}
+  .tab.on{background:var(--primary);color:#fff}
+  .tab:focus-visible{outline:2px solid var(--primary-focus);outline-offset:2px}
+
+  /* ---------- day panels ---------- */
+  .day{display:none}
+  .day.on{display:block}
+
+  /* dark day-hero tile: the color change IS the divider */
+  .day-hero{text-align:center;padding:64px 24px}
+  .day-hero.t1{background:var(--tile-1)}
+  .day-hero.t2{background:var(--tile-2)}
+  .day-hero .d-eyebrow{font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--muted-on-dark)}
+  .day-hero h2{font-size:clamp(32px,9vw,40px);font-weight:600;line-height:1.1;letter-spacing:-0.374px;color:var(--on-dark);margin-top:10px}
+  .day-hero .theme{font-size:21px;font-weight:400;line-height:1.33;letter-spacing:-0.374px;color:var(--muted-on-dark);margin-top:12px}
+  .day-hero .move{font-size:14px;letter-spacing:-0.224px;color:var(--muted-on-dark);margin-top:16px}
+
+  .day-body{background:var(--parchment);padding:48px 0 88px}
+
+  /* ---------- weather ---------- */
+  .weather{background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:24px}
+  .weather .w-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .weather .w-title h3{font-size:17px;font-weight:600;letter-spacing:-0.374px}
+  .weather .w-title span{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48)}
+  .w-strip{display:flex;gap:8px;overflow-x:auto;margin-top:16px;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .w-hour{min-width:62px;flex:0 0 auto;text-align:center;background:var(--pearl);border:1px solid var(--divider);border-radius:8px;padding:10px 4px}
+  .w-hour .t{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48)}
+  .w-hour .c{font-size:17px;font-weight:600;letter-spacing:-0.374px;margin-top:2px}
+  .w-hour .p{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48);margin-top:2px}
+  .w-msg{font-size:14px;color:var(--ink-48);margin-top:12px}
+
+  /* ---------- course map ---------- */
+  .mapcard{background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:24px;margin-top:16px}
+  .map{height:300px;border-radius:8px;overflow:hidden;background:var(--pearl);margin-top:16px}
+  .m-note{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48);margin-top:12px;line-height:1.5}
+  .lg{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  .lg i{display:inline-block;width:10px;height:10px;border-radius:9999px}
+  .lg i.f{background:var(--primary)}
+  .lg i.o{background:#fff;border:2px solid var(--primary)}
+  .pinwrap{background:none;border:none}
+  .pin-fill{
+    width:26px;height:26px;border-radius:9999px;background:var(--primary);color:#fff;
+    font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;
+    border:2px solid #fff;
+  }
+  .pin-line{width:18px;height:18px;border-radius:9999px;background:#fff;border:2px solid var(--primary)}
+  .leaflet-container{font-family:inherit}
+  .leaflet-bar{box-shadow:none;border:1px solid var(--hairline)}
+  .leaflet-popup-content-wrapper{box-shadow:none;border:1px solid var(--hairline);border-radius:11px}
+  .leaflet-popup-tip{box-shadow:none}
+  .leaflet-popup-content{margin:12px 14px;font-size:14px;letter-spacing:-0.224px;line-height:1.43}
+  .pop-name{font-weight:600}
+  .pop-sub{color:var(--ink-48);font-size:12px;margin-top:2px}
+  .leaflet-popup-content a{color:var(--primary);text-decoration:none;display:inline-block;margin-top:6px}
+
+  /* ---------- timeline ---------- */
+  .tl{list-style:none;margin-top:44px;border-left:1px solid var(--hairline);margin-left:6px;padding-left:22px}
+  .tl-item{position:relative;padding-bottom:48px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{
+    content:"";position:absolute;left:-27px;top:8px;width:9px;height:9px;border-radius:9999px;background:var(--ink);
+  }
+  .tl-time{font-size:14px;font-weight:600;letter-spacing:-0.224px;color:var(--ink-48)}
+  .tl-label{font-size:24px;font-weight:600;letter-spacing:-0.374px;margin-top:6px;line-height:1.19}
+  .tl-move{font-size:14px;letter-spacing:-0.224px;color:var(--ink-48);margin-top:6px}
+  .badge{
+    display:inline-block;vertical-align:4px;margin-left:8px;
+    font-size:12px;font-weight:600;letter-spacing:-0.12px;color:var(--primary);
+    border:1px solid var(--primary);border-radius:9999px;padding:2px 10px;
+  }
+
+  /* ---------- place card ---------- */
+  .card{background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:24px;margin-top:16px}
+  .card .desc{font-size:17px;margin-top:0}
+  .facts{list-style:none;margin-top:16px;display:grid;gap:8px}
+  .facts li{display:grid;grid-template-columns:52px 1fr;gap:12px;font-size:14px;letter-spacing:-0.224px;line-height:1.43}
+  .facts li span{font-weight:600;color:var(--ink-48)}
+  .see{list-style:none;margin-top:16px;display:grid;gap:10px}
+  .see li{font-size:14px;letter-spacing:-0.224px;line-height:1.43;padding-left:14px;position:relative}
+  .see li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:9999px;background:var(--hairline)}
+  .see li strong{font-weight:600;color:var(--ink)}
+  .review{font-size:14px;letter-spacing:-0.224px;color:var(--ink-80);line-height:1.43;margin-top:16px;padding-top:16px;border-top:1px solid var(--divider)}
+  .review b{font-weight:600}
+  .note{font-size:14px;letter-spacing:-0.224px;color:var(--ink-48);line-height:1.43;margin-top:12px}
+  .card-foot{margin-top:20px}
+
+  /* ---------- vote options ---------- */
+  .options{display:grid;gap:14px;margin-top:16px}
+  .option{
+    background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;
+    padding:24px;cursor:pointer;transition:transform .15s ease;
+  }
+  .option:active{transform:scale(0.95)}
+  .option:focus-visible{outline:2px solid var(--primary-focus);outline-offset:2px}
+  .option.selected{border:2px solid var(--primary-focus);padding:23px}
+  .opt-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .opt-name{font-size:21px;font-weight:600;letter-spacing:-0.374px;line-height:1.19}
+  .opt-kind{font-size:14px;font-weight:400;color:var(--ink-48);letter-spacing:-0.224px}
+  .opt-mine{font-size:12px;font-weight:600;letter-spacing:-0.12px;color:var(--primary);white-space:nowrap;display:none}
+  .option.selected .opt-mine{display:inline}
+  .opt-desc{font-size:14px;letter-spacing:-0.224px;line-height:1.43;color:var(--ink-80);margin-top:10px}
+  .opt-meta{font-size:14px;letter-spacing:-0.224px;line-height:1.43;color:var(--ink-48);margin-top:8px}
+  .opt-list{list-style:none;margin-top:10px;display:grid;gap:6px}
+  .opt-list li{font-size:14px;letter-spacing:-0.224px;color:var(--ink-80);line-height:1.43}
+  .opt-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--divider)}
+  .tally{font-size:14px;letter-spacing:-0.224px;line-height:1.43;min-height:20px}
+  .tally b{font-weight:600}
+  .tally .names{color:var(--ink-48)}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--parchment);border-top:1px solid var(--hairline);padding:48px 24px 80px;text-align:center}
+  footer p{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48);line-height:1.7}
 
   /* ---------- name modal ---------- */
-  .modal{
-    position:fixed;inset:0;z-index:500;display:flex;align-items:flex-end;justify-content:center;
-    background:rgba(29,29,31,.4);
-  }
-  .modal[hidden]{display:none}
-  .modal-card{
-    width:100%;max-width:680px;background:var(--bg);
-    border-radius:18px 18px 0 0;padding:28px 24px calc(28px + env(safe-area-inset-bottom));
-  }
-  .modal-card h3{font-size:21px;letter-spacing:-.01em;margin:0 0 6px}
-  .modal-card p{margin:0 0 18px;font-size:15px;color:var(--muted)}
-  .name-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
+  .scrim.on{display:flex}
+  .sheet{background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:28px 24px;width:100%;max-width:360px;text-align:center}
+  .sheet h3{font-size:24px;font-weight:600;letter-spacing:-0.374px;line-height:1.19}
+  .sheet p{font-size:14px;letter-spacing:-0.224px;color:var(--ink-48);margin-top:8px}
+  .name-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
   .name-btn{
-    min-height:56px;border:1px solid var(--hair);border-radius:18px;
-    background:var(--bg);font-family:inherit;font-size:18px;font-weight:600;color:var(--ink);
-    cursor:pointer;transition:transform .12s ease;
+    min-height:48px;border-radius:9999px;border:1px solid var(--hairline);background:var(--pearl);
+    font-family:inherit;font-size:17px;font-weight:600;letter-spacing:-0.374px;color:var(--ink);
+    cursor:pointer;transition:transform .15s ease;
   }
-  .name-btn:active{transform:scale(.95)}
-  .modal-skip{
-    display:block;width:100%;margin:14px 0 0;min-height:44px;
-    background:none;border:none;cursor:pointer;font-family:inherit;
-    font-size:15px;font-weight:600;color:var(--accent);
+  .name-btn:active{transform:scale(0.95)}
+  .name-btn:focus-visible{outline:2px solid var(--primary-focus);outline-offset:2px}
+  .etc-label{font-size:12px;letter-spacing:-0.12px;color:var(--ink-48);margin-top:18px;text-align:left}
+  .etc-row{display:flex;gap:8px;margin-top:8px}
+  .etc-input{
+    flex:1;min-width:0;min-height:48px;padding:12px 20px;border-radius:9999px;
+    border:1px solid var(--hairline);background:var(--canvas);
+    font-family:inherit;font-size:17px;letter-spacing:-0.374px;color:var(--ink);
   }
+  .etc-input:focus-visible{outline:2px solid var(--primary-focus);outline-offset:-1px}
 
-  @media (min-width:560px){
-    .sum-grid{display:grid;grid-template-columns:1fr 1fr}
+  /* ---------- toast ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:110;
+    background:var(--ink);color:#fff;border-radius:9999px;padding:12px 22px;
+    font-size:14px;letter-spacing:-0.224px;display:none;max-width:calc(100% - 48px);text-align:center;
   }
+  .toast.on{display:block}
 </style>
 </head>
 <body>
 
-<!-- ============ HERO ============ -->
+<nav class="gnav" aria-label="상단"><span>서울 여행</span></nav>
+
+<!-- ===================== hero ===================== -->
 <header class="hero">
-  <div class="wrap">
-    <p class="eyebrow">Seoul · 7.12 – 7.15</p>
-    <h1>서울 가족여행,<br>이 코스 어때요?</h1>
-    <p class="lede">엄마·이모·사촌동생·연정 넷이 보는 추천안이에요. 7월 더위를 피해 실내 위주로 짰고, 모든 일정은 확정이 아니라 <b>투표로 정하는 제안</b>입니다. 마음에 드는 쪽을 탭해 주세요.</p>
+  <p class="eyebrow">2026. 7. 13 – 7. 14 · 서울</p>
+  <h1>서울 여행</h1>
+  <p class="lead">일정 확인하고,<br>가고 싶은 곳에 투표해 주세요.</p>
+  <div class="cta">
+    <a class="btn-fill" href="#tabbar">일정 보기</a>
+  </div>
+  <div class="voter">
+    <span class="who">투표하는 사람: <strong id="voterName">선택 안 됨</strong></span>
+    <button type="button" class="btn-ghost btn-sm" id="changeVoter">변경</button>
   </div>
 </header>
 
-<!-- ============ SUMMARY ============ -->
-<section class="summary">
-  <div class="wrap">
-    <h2>한눈에 보기</h2>
-    <div class="sum-grid">
-      <button class="sum-card" data-target="panel-d12">
-        <span class="sum-date">7/12 일요일 저녁</span>
-        <span class="sum-title">잠실 집결 — 엄마와 둘이 저녁</span>
-        <span class="sum-spots">도꼭지 · 동화고옥 (롯데월드몰)</span>
+<!-- ===================== 일자별 요약 (parchment band) ===================== -->
+<section class="summary-band" aria-label="일자별 요약">
+  <div class="inner">
+    <h2 class="band-title">이틀, 이렇게 움직여요</h2>
+    <p class="band-sub">카드를 누르면 그날 일정으로 이동해요</p>
+    <div class="summary">
+      <button type="button" class="sum-card" data-goto="d0713">
+        <div class="d">7/13 (월)</div>
+        <div class="r">용산 → 여의도</div>
+        <div class="s">국립중앙박물관 「우리들의 밥상」 특별전</div>
+        <span class="go">일정 보기 ›</span>
       </button>
-      <button class="sum-card" data-target="panel-d13">
-        <span class="sum-date">7/13 월요일</span>
-        <span class="sum-title">용산 → 여의도, 실내로만</span>
-        <span class="sum-spots">국립중앙박물관 → 이촌 점심 → 더현대 서울</span>
-      </button>
-      <button class="sum-card" data-target="panel-d14">
-        <span class="sum-date">7/14 화요일</span>
-        <span class="sum-title">한남 → 광화문, 전시 피날레</span>
-        <span class="sum-spots">리움 → 그라운드시소 → 미진 → 해치마당 미디어월</span>
+      <button type="button" class="sum-card" data-goto="d0714">
+        <div class="d">7/14 (화)</div>
+        <div class="r">광진(워커힐) → 잠실</div>
+        <div class="s">빛의 시어터 몰입형 미디어아트</div>
+        <span class="go">일정 보기 ›</span>
       </button>
     </div>
-    <p class="sum-note"><b>7/15 수요일</b> — 아침에 일어나서 바로 귀가. 일정 없이 푹 쉬는 날이에요.</p>
   </div>
 </section>
 
-<!-- ============ TABS ============ -->
+<!-- ===================== 탭 바 ===================== -->
 <nav class="tabbar" id="tabbar" aria-label="날짜 선택">
-  <div class="wrap">
-    <button class="tab on" data-target="panel-d12" aria-selected="true"><span class="t-num">7/12</span><span class="t-sub">일 · 저녁</span></button>
-    <button class="tab" data-target="panel-d13" aria-selected="false"><span class="t-num">7/13</span><span class="t-sub">월</span></button>
-    <button class="tab" data-target="panel-d14" aria-selected="false"><span class="t-num">7/14</span><span class="t-sub">화</span></button>
-    <button class="voter-chip" id="voterChip" aria-label="투표자 선택">🙋</button>
+  <div class="row" role="tablist">
+    <button type="button" class="tab" id="tab-d0713" data-tab="d0713" role="tab" aria-selected="false">7/13</button>
+    <button type="button" class="tab" id="tab-d0714" data-tab="d0714" role="tab" aria-selected="false">7/14</button>
   </div>
 </nav>
 
-<div class="notice" id="sbNotice" hidden>
-  <div class="wrap">⚠️ 지금은 투표 서버에 연결되지 않았어요 — 투표는 이 기기에만 저장됩니다.</div>
-</div>
-
 <main>
 
-<!-- ============ 7/12 ============ -->
-<section class="panel" id="panel-d12">
-  <div class="day-head">
-    <div class="wrap">
-      <p class="eyebrow">7월 12일 일요일 · 저녁</p>
-      <h2>잠실 집결, 가볍게 저녁만</h2>
-      <p class="sub">저녁 도착이라 무리하지 않는 날. 엄마와 연정 둘이 숙소 근처에서 저녁만 맛있게 먹어요. 12일은 사흘 중 가장 더운 날(한낮 체감 40도 근처)이라 실내가 정답이에요.</p>
-    </div>
+<!-- ===================== 7/13 (월) ===================== -->
+<section class="day" id="day-d0713" role="tabpanel" aria-labelledby="tab-d0713">
+
+  <div class="day-hero t1">
+    <p class="d-eyebrow">7/13 (월) · DAY 1</p>
+    <h2>용산 → 여의도</h2>
+    <p class="theme">K-푸드 특별전 보고,<br>밥 잘 먹는 날</p>
+    <p class="move">이동: 잠실 → 이촌(국립중앙박물관) 지하철 약 40분 / 택시 25~30분</p>
   </div>
 
-  <div class="wx">
-    <div class="wrap">
-      <h3>저녁 시간대 날씨</h3>
-      <p class="src">서울 잠실 기준 · Open-Meteo · 옆으로 밀어서 더 보기</p>
-      <div class="wx-strip" data-day="2026-07-12" data-from="17" data-to="22"><p class="wx-err">예보 불러오는 중…</p></div>
-    </div>
-  </div>
+  <div class="day-body">
+    <div class="inner">
 
-  <div class="course">
-    <div class="wrap">
-      <h3>추천 코스</h3>
-
-      <div class="tl-move">🚄 수서역 도착 기준 — 3호선 1정거장 → 가락시장 → 8호선 7분 → 잠실 · 택시로는 15~20분</div>
-
-      <div class="vote" data-item="d12-dinner">
-        <div class="vote-head"><span class="when-chip">저녁 · 도착 후</span><h4>저녁, 어디서 먹을까요?</h4><span class="vhint">탭해서 투표</span></div>
-        <p class="vnote">둘 다 롯데월드몰 안이라 잠실 집에서 바로예요. 엄마＋연정 2인 식사지만, 다들 의견 주세요.</p>
-        <div class="choices">
-          <div class="choice" data-choice="dokkokji" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">도꼭지</span><span class="c-count">0표</span></div>
-            <p class="c-meta">솥밥 · 1인 15,000원 안팎</p>
-            <p class="c-desc">"부모님 모시고 가도 너무 좋은 곳, 솥밥이 맛있다"는 후기의 솥밥집. 첫날 저녁 기본 추천.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/잠실 도꼭지" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-          <div class="choice" data-choice="donghwa" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">동화고옥</span><span class="c-count">0표</span></div>
-            <p class="c-meta">룸 한정식 · 코스 99,000원~ · 롯데월드몰 6층 · 예약 권장</p>
-            <p class="c-desc">전 좌석 룸이라 "조용하고 차분한 분위기"(다이닝코드 4.6). 제대로 차리고 싶은 날.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/동화고옥 롯데월드몰" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-        </div>
-        <ul class="tips" style="margin-top:14px"><li>식사 후 지하 1층 <b>이성당</b>에서 빵 사 가기.</li></ul>
+      <div class="weather">
+        <div class="w-title"><h3>시간별 날씨 · 7/13</h3><span>기온 · 강수확률</span></div>
+        <div class="w-strip" id="w-d0713"><p class="w-msg">날씨를 불러오는 중…</p></div>
       </div>
 
-      <div class="tl-move">🚶 저녁 먹고 나서 — 그대로 몰에서 이어가거나, 밖으로 한 바퀴</div>
-
-      <div class="vote" data-item="d12-after">
-        <div class="vote-head"><span class="when-chip">저녁 후</span><h4>식후 코스는?</h4><span class="vhint">탭해서 투표</span></div>
-        <div class="choices">
-          <div class="choice" data-choice="lake" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">석촌호수 야간 산책</span><span class="c-count">0표</span></div>
-            <p class="c-meta">도보 코스 · 20~30분만 짧게</p>
-            <p class="c-desc">밤에도 체감 35도 안팎이라 물 들고 짧게만. 후텁지근하면 무리하지 않기.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/석촌호수" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-          <div class="choice" data-choice="mall" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">롯데월드몰 구경</span><span class="c-count">0표</span></div>
-            <p class="c-meta">실내 · 냉방</p>
-            <p class="c-desc">해가 져도 더우면 시원한 몰 구경으로 대체 — 첫날은 체력 아끼기.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/롯데월드몰" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-        </div>
+      <div class="mapcard">
+        <div class="w-title"><h3>코스 지도 · 7/13</h3><span><span class="lg"><i class="f"></i> 스팟</span>&ensp;<span class="lg"><i class="o"></i> 투표 후보</span></span></div>
+        <div class="map" id="map-d0713"></div>
+        <p class="m-note">핀 위치는 대략적인 안내용이에요. 정확한 위치는 각 카드의 지도 버튼으로 확인해 주세요.</p>
       </div>
 
-    </div>
-  </div>
+      <ol class="tl">
+        <li class="tl-item">
+          <div class="tl-time">10:00~13:00 권장</div>
+          <div class="tl-label">국립중앙박물관</div>
+          <article class="card">
+            <ul class="facts">
+              <li><span>위치</span>용산구 서빙고로 137 (이촌역 2번 출구 연결)</li>
+              <li><span>운영</span>매일 09:30~17:30 (월요일 정상 개관)</li>
+              <li><span>입장</span>상설전시 무료 / 특별전 유료</li>
+            </ul>
+            <ul class="see">
+              <li><strong>특별전 「우리들의 밥상」</strong> (2026.7.1~10.25) — K-푸드의 원형과 변천을 조명하는 특별전. 조선시대 풍속화 속 밥상부터 현대까지. 먹는 거 좋아하는 우리 맞춤</li>
+              <li><strong>특별전 「태국 미술」</strong> (2026.6.16~9.6) — 국내 최초 태국 미술전</li>
+              <li><strong>사유의 방</strong> — 반가사유상 2점만을 위한 명상적 전시 공간, 국중박 대표 공간</li>
+              <li><strong>외규장각 의궤 전용 전시실</strong> — 2층 서화관</li>
+            </ul>
+            <p class="note">참고: 불교회화실·불교조각실 등 일부 상설실은 7/6부터 휴실 중</p>
+            <p class="review"><b>후기 요약</b> — 사유의 방은 "서울에서 가장 압도적인 단일 전시 공간"이라는 평이 정착된 곳. 전관 실내 + 냉방으로 더위 회피 최적</p>
+            <div class="card-foot">
+              <a class="btn-fill btn-sm" href="https://map.naver.com/p/search/국립중앙박물관" target="_blank" rel="noopener">네이버지도</a>
+            </div>
+          </article>
+        </li>
 
-  <div class="confirm-sect">
-    <div class="wrap">
-      <div class="vote confirm" data-item="d12-confirm">
-        <h3>7/12 저녁, 이대로 갈까요?</h3>
-        <p>도착 날은 저녁만 가볍게 — 무리 없는 일정이에요.</p>
-        <div class="choices">
-          <div class="choice" data-choice="good" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">👍 좋아요, 이대로 가요</span><span class="c-count">0표</span></div>
-            <div class="c-foot"><span class="c-who"></span></div>
+        <li class="tl-item">
+          <div class="tl-time">13:00~14:30</div>
+          <div class="tl-label">점심 — 이촌 후보 3곳 <span class="badge">투표</span></div>
+          <div class="options" data-item="vote-0713-lunch">
+
+            <div class="option" role="button" tabindex="0" data-choice="백옥 용산">
+              <div class="opt-top">
+                <div class="opt-name">백옥 용산 <span class="opt-kind">곰탕</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">깔끔하고 담백한 곰탕, 배추만두. "깨끗하고 속 편한 맛" 평 다수</p>
+              <p class="opt-meta">구글 4.9점 (리뷰 257개) · 매일 11:00~22:00</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/백옥 용산" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="스즈란테이 본점">
+              <div class="opt-top">
+                <div class="opt-name">스즈란테이 본점 <span class="opt-kind">일식 도시락</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">사시미·튀김·계란찜 포함 특도시락, 가성비 좋은 정통 일식. 건물 지하라 찾기 살짝 어려움</p>
+              <p class="opt-meta">구글 4.2점 (리뷰 769개) · 매일 11:30~21:30</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/스즈란테이 이촌" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="르미야">
+              <div class="opt-top">
+                <div class="opt-name">르미야 <span class="opt-kind">한일 퓨전 파스타</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">명란파스타 시그니처, 아기자기한 동네 맛집</p>
+              <p class="opt-meta">구글 4.2점 (리뷰 158개) · 매일 11:00~15:00, 16:30~21:30</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/르미야 이촌" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
           </div>
-          <div class="choice" data-choice="adjust" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">🤔 조금 조정하고 싶어요</span><span class="c-count">0표</span></div>
-            <div class="c-foot"><span class="c-who"></span></div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-time">15:00~18:00</div>
+          <div class="tl-label">오후 — 어디로 갈까? <span class="badge">투표</span></div>
+          <div class="options" data-item="vote-0713-afternoon">
+
+            <div class="option" role="button" tabindex="0" data-choice="더현대 서울">
+              <div class="opt-top">
+                <div class="opt-name">더현대 서울 <span class="opt-kind">여의도</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">서울 최대 규모 백화점, 5층 실내 정원 '사운즈 포레스트'가 대표 포토스팟. 전관 실내 냉방, 지하 식품관 구경만으로도 반나절. 사촌동생(영등포 거주) 합류 동선 최적</p>
+              <p class="opt-meta">이동: 이촌 → 여의도 택시 약 15~20분</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/더현대서울" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="광장시장">
+              <div class="opt-top">
+                <div class="opt-name">광장시장 <span class="opt-kind">종로</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">아케이드 지붕 있는 전통시장. 빈대떡·마약김밥·육회 등 먹거리 성지. 이모님 세대 취향 저격, 단 냉방은 약함(선풍기 수준)</p>
+              <p class="opt-meta">이동: 이촌 → 종로5가 택시 약 20~25분</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/광장시장" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
           </div>
-        </div>
-      </div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-time">18:00~</div>
+          <div class="tl-label">저녁 — 어떻게 할까? <span class="badge">투표</span></div>
+          <div class="options" data-item="vote-0713-dinner">
+
+            <div class="option" role="button" tabindex="0" data-choice="더현대 지하 식품관">
+              <div class="opt-top">
+                <div class="opt-name">더현대 지하 식품관에서 해결 <span class="opt-kind">오후 A안 선택 시</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <ul class="opt-list">
+                <li>바오서울 — 구글 4.9점 (리뷰 407개), 대만식 바오·우육면</li>
+                <li>쬬쬬 — 구글 4.9점 (리뷰 228개), 오코노미야키·명란교자</li>
+                <li>릴버거 — 구글 5.0점 (리뷰 439개), 스매시버거</li>
+              </ul>
+              <p class="opt-meta">웨이팅 감안해 17:30 전 입장 권장</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="잠실 복귀 후 집 근처 저녁">
+              <div class="opt-top">
+                <div class="opt-name">잠실 복귀 후 집 근처 저녁</div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">첫 투어일이라 일찍 복귀해 쉬는 안. 엄마·이모 체력 상태 보고 당일 결정 가능</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+              </div>
+            </div>
+
+          </div>
+        </li>
+      </ol>
+
     </div>
   </div>
 </section>
 
-<!-- ============ 7/13 ============ -->
-<section class="panel" id="panel-d13" hidden>
-  <div class="day-head">
-    <div class="wrap">
-      <p class="eyebrow">7월 13일 월요일 · 용산 → 여의도</p>
-      <h2>월요일에도 문 여는 곳만</h2>
-      <p class="sub">월요일엔 리움·아모레퍼시픽·한가람이 전부 휴관이에요. 월요일에도 여는 국립중앙박물관(몰입형 실감영상관 포함)과 더현대 서울로 — 이동까지 거의 전부 실내입니다. 비가 와도 접이식 우산 하나면 충분해요.</p>
-    </div>
+<!-- ===================== 7/14 (화) ===================== -->
+<section class="day" id="day-d0714" role="tabpanel" aria-labelledby="tab-d0714">
+
+  <div class="day-hero t2">
+    <p class="d-eyebrow">7/14 (화) · DAY 2</p>
+    <h2>광진(워커힐) → 잠실 → 시내</h2>
+    <p class="theme">몰입형 미디어아트 + 오후 시내 나들이</p>
   </div>
 
-  <div class="wx">
-    <div class="wrap">
-      <h3>시간별 날씨</h3>
-      <p class="src">서울 잠실 기준 · Open-Meteo · 옆으로 밀어서 더 보기</p>
-      <div class="wx-strip" data-day="2026-07-13" data-from="9" data-to="21"><p class="wx-err">예보 불러오는 중…</p></div>
-    </div>
-  </div>
+  <div class="day-body">
+    <div class="inner">
 
-  <div class="course">
-    <div class="wrap">
-      <h3>추천 코스</h3>
-
-      <article class="place">
-        <p class="when">10:00 – 13:00 · 월요일 정상 개관</p>
-        <h4>국립중앙박물관</h4>
-        <p class="desc">국보 반가사유상 두 점만 모신 <b>'사유의 방'</b>부터(개관 직후가 제일 한산), 벽 전체가 움직이는 <b>디지털 실감영상관</b>에서 그림 속을 걷는 체험, 태국 국보급 유물 239점 특별전까지.</p>
-        <ul class="facts">
-          <li><b>상설·실감영상관</b> 무료 · 예약 불필요</li>
-          <li><b>특별전 「어메이징 타일랜드: 태국미술명품전」</b> 6/23~9/6 · 성인 8,000원 · 온라인 예매 권장</li>
-        </ul>
-        <p class="quote">"지루한 전시의 틀을 바꿨다… 사유의 방은 명상하듯 보게 된다"</p>
-        <ul class="tips">
-          <li>무료 + 냉방 잘되는 초대형 실내 + 평탄한 동선이라 걷기 편해요.</li>
-          <li>이촌역 2번 출구 '박물관나들길' 지하통로 직결 — 땡볕 없이 입장.</li>
-          <li>동선 추천: 사유의 방 → 실감영상관 → 태국전, 2~3시간이면 충분.</li>
-        </ul>
-        <div class="cta">
-          <a class="pill" href="https://map.naver.com/p/search/국립중앙박물관" target="_blank" rel="noopener">네이버지도</a>
-          <a class="textlink" href="https://www.museum.go.kr" target="_blank" rel="noopener">태국전 예매 ↗</a>
-        </div>
-      </article>
-
-      <div class="tl-move">🚇 잠실 → 2호선 20분 → 왕십리 → 경의중앙선 12분 → 이촌 → 지하통로 도보 5분 · <b>약 40분</b></div>
-
-      <article class="place">
-        <p class="when">13:00 점심 · 룸 보유</p>
-        <h4>한강회관 — 서울식 불고기</h4>
-        <p class="desc">30년 넘은 이촌동 노포. 자작한 국물의 서울식 한우 불고기라 자극적이지 않고 어른들 입에 부담 없어요. 박물관에서 도보 10분 안팎. 리서치에서 이 동네 확정 후보는 여기 한 곳 — 투표 없이 추천으로 둘게요.</p>
-        <p class="quote">"부드럽고 자극적이지 않은 단짠… 고급진 양반댁 느낌" (다이닝코드 5.0)</p>
-        <ul class="tips">
-          <li>11~14시 주문 시 1인분 2,000원 할인 — 14시 전에 주문!</li>
-          <li class="warn">브레이크 15~17시 · 전화 예약 권장.</li>
-        </ul>
-        <div class="cta"><a class="pill" href="https://map.naver.com/p/search/이촌동 한강회관" target="_blank" rel="noopener">네이버지도</a></div>
-      </article>
-
-      <div class="tl-move">🚶 스노우볼은 같은 이촌동, 포디 서울은 용산 쪽 — 선택에 따라 도보 또는 짧은 택시</div>
-
-      <div class="vote" data-item="d13-cafe">
-        <div class="vote-head"><span class="when-chip">14:30</span><h4>제일 더운 시간, 카페는?</h4><span class="vhint">탭해서 투표</span></div>
-        <div class="choices">
-          <div class="choice" data-choice="snowball" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">스노우볼 이촌</span><span class="c-count">0표</span></div>
-            <p class="c-meta">빙수 · 이촌동</p>
-            <p class="c-desc">"박물관 다녀온 뒤 들르기 좋다"는 이촌동 디저트집 — 빙수로 시원하게.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/이촌 스노우볼" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-          <div class="choice" data-choice="podi" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">포디 서울</span><span class="c-count">0표</span></div>
-            <p class="c-meta">통창 카페 · 용산</p>
-            <p class="c-desc">빙수 대신 커피와 뷰 — 통창 카페에서 느긋하게 쉬어 가기.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/용산 포디서울" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-        </div>
+      <div class="weather">
+        <div class="w-title"><h3>시간별 날씨 · 7/14</h3><span>기온 · 강수확률</span></div>
+        <div class="w-strip" id="w-d0714"><p class="w-msg">날씨를 불러오는 중…</p></div>
       </div>
 
-      <div class="tl-move">🚇 이촌 → 4호선 1정거장 → 동작 → 9호선 급행 10분 → 여의도 → 지하 직결 · <b>약 25분</b></div>
-
-      <article class="place">
-        <p class="when">16:00 – 19:00 · 팝업 체험 · 쇼핑</p>
-        <h4>더현대 서울</h4>
-        <p class="desc">5층 <b>사운즈 포레스트</b> — 유리 천장 아래 1,000평 실내 정원(무료, 벤치 많음). 층마다 열리는 <b>팝업스토어</b>는 굿즈 만들기·시식·포토존 같은 참여형이 많아 구경만 해도 재밌어요.</p>
-        <ul class="facts">
-          <li><b>이번 주 팝업</b> 매주 바뀜 — 방문 주에 인스타 @weekly_thehyundai에서 확인 · 대부분 입장 무료</li>
-        </ul>
-        <p class="quote">"쇼핑몰이 아니라 나들이 코스"</p>
-        <ul class="tips">
-          <li>식당가 줄은 '현대식품관' 앱으로 원격 웨이팅 걸고 그동안 팝업 구경.</li>
-        </ul>
-        <div class="cta">
-          <a class="pill" href="https://map.naver.com/p/search/더현대 서울" target="_blank" rel="noopener">네이버지도</a>
-          <a class="textlink" href="https://www.instagram.com/weekly_thehyundai/" target="_blank" rel="noopener">팝업 라인업 ↗</a>
-        </div>
-      </article>
-
-      <div class="tl-move">🛗 저녁은 더현대 안에서 — 이동 없음</div>
-
-      <div class="vote" data-item="d13-dinner">
-        <div class="vote-head"><span class="when-chip">19:00</span><h4>더현대 저녁, 어디로?</h4><span class="vhint">탭해서 투표</span></div>
-        <div class="choices">
-          <div class="choice" data-choice="gaya" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">나의가야</span><span class="c-count">0표</span></div>
-            <p class="c-meta">6층 · 불고기 33,000원 · 2인 전골 26,000원 · 칸막이 4인석</p>
-            <p class="c-desc">"비싼 만큼 맛있는 고품질 불고기, 특별한 날 추천" — 높은 칸막이라 편하게. 평일은 전화 예약 가능, 주말·저녁엔 '현대식품관' 앱 원격 웨이팅.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/더현대서울 나의가야" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-          <div class="choice" data-choice="hansol" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">한솔냉면</span><span class="c-count">0표</span></div>
-            <p class="c-meta">지하 1층 · 고구마 전분 100% 즉석 면</p>
-            <p class="c-desc">압구정 출신 정통 냉면 — 더운 날 저녁을 가볍고 시원하게.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/더현대서울 한솔냉면" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-        </div>
-        <ul class="tips" style="margin-top:14px"><li>디저트는 3층 <b>로라스블랑</b>(분수 뷰) — 차분한 분위기.</li></ul>
+      <div class="mapcard">
+        <div class="w-title"><h3>코스 지도 · 7/14</h3><span><span class="lg"><i class="f"></i> 스팟</span>&ensp;<span class="lg"><i class="o"></i> 투표 후보</span></span></div>
+        <div class="map" id="map-d0714"></div>
+        <p class="m-note">핀 위치는 대략적인 안내용이에요. 정확한 위치는 각 카드의 지도 버튼으로 확인해 주세요.</p>
       </div>
 
-      <div class="tl-move">🏠 여의도 → 9호선 급행 30분 → 석촌 → 8호선 1정거장 → 잠실 · <b>약 40분</b></div>
+      <ol class="tl">
+        <li class="tl-item">
+          <div class="tl-time">10:00~12:00</div>
+          <div class="tl-label">빛의 시어터</div>
+          <article class="card">
+            <p class="desc">1,500평·층고 21m 국내 최대급 몰입형 미디어아트. 벽·바닥·기둥 전체에 명화가 투사되고 클래식 음악이 함께 흐름. 현재 전시: 「파라오의 이집트」(메인 36분) + 「이응노: 위대한 예술적 여정」(숏쇼)</p>
+            <ul class="facts">
+              <li><span>위치</span>광진구 워커힐로 177, 워커힐 호텔 B1 (잠실에서 택시 15~20분 / 광나루역·강변역 무료셔틀)</li>
+              <li><span>운영</span>매일 10:00~ (마감 시간 시즌별 상이, 방문 전 홈페이지 확인)</li>
+              <li><span>입장</span>성인 29,000원 (네이버 예매 시 약 10% 할인, 결제 1시간 후 바코드 활성화되므로 미리 예매)</li>
+            </ul>
+            <p class="note">⚠️ 전시는 약 6개월 주기로 교체됨 — 예매 전 공식 홈페이지(deslumieres.co.kr)에서 현재 전시 확인 필수</p>
+            <p class="review"><b>후기 요약</b> — "국내 미디어아트 전시 중 최고 수준", 영상·음향 만족도 매우 높음. 걸어다니지 않고 앉아서 감상 가능해 어른 모시기 좋음. 관람 후 한강뷰 카페 '빛의 라운지' 이용 가능</p>
+            <div class="card-foot">
+              <a class="btn-fill btn-sm" href="https://map.naver.com/p/search/빛의시어터" target="_blank" rel="noopener">네이버지도</a>
+            </div>
+          </article>
+        </li>
 
-    </div>
-  </div>
+        <li class="tl-item">
+          <div class="tl-time">12:30~14:00</div>
+          <div class="tl-label">점심 — 롯데월드몰 후보 3곳 <span class="badge">투표</span></div>
+          <div class="options" data-item="vote-0714-lunch">
 
-  <div class="confirm-sect">
-    <div class="wrap">
-      <div class="vote confirm" data-item="d13-confirm">
-        <h3>7/13 코스, 이대로 갈까요?</h3>
-        <p>비가 와도 전부 실내·지하 연결이라 코스는 그대로 진행 가능해요.</p>
-        <div class="choices">
-          <div class="choice" data-choice="good" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">👍 좋아요, 이대로 가요</span><span class="c-count">0표</span></div>
-            <div class="c-foot"><span class="c-who"></span></div>
+            <div class="option" role="button" tabindex="0" data-choice="쌤쌤쌤 롯데월드몰점">
+              <div class="opt-top">
+                <div class="opt-name">쌤쌤쌤 롯데월드몰점 <span class="opt-kind">양식</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">흑백요리사 출연 셰프 매장, 롤라자냐 시그니처. 웨이팅 김(캐치테이블 원격 줄서기 권장)</p>
+              <p class="opt-meta">구글 4.9점 (리뷰 6,906개)</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/쌤쌤쌤 롯데월드몰" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="꽃, 궁">
+              <div class="opt-top">
+                <div class="opt-name">꽃, 궁 <span class="opt-kind">한정식</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">전 좌석 개별룸 + 석촌호수뷰, 갈비 코스. 어른 모시기 최적, 1일 전 예약 필요</p>
+              <p class="opt-meta">구글 4.8점 (리뷰 217개)</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/꽃궁 롯데월드몰" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="분지로">
+              <div class="opt-top">
+                <div class="opt-name">분지로 <span class="opt-kind">돈카츠</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">바삭·촉촉 밸런스 좋은 돈카츠, 좌석 15석 내외로 웨이팅 있음</p>
+              <p class="opt-meta">구글 4.9점 (리뷰 996개)</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/분지로 롯데월드몰" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
           </div>
-          <div class="choice" data-choice="adjust" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">🤔 조금 조정하고 싶어요</span><span class="c-count">0표</span></div>
-            <div class="c-foot"><span class="c-who"></span></div>
+        </li>
+
+        <li class="tl-item">
+          <div class="tl-time">14:00~17:30</div>
+          <div class="tl-label">오후 — 시내로 나갈까? <span class="badge">투표</span></div>
+          <p class="tl-move">둘 다 잠실역에서 2호선으로 한 번에 가요 · 저녁은 다시 석촌호수 쪽이에요</p>
+          <div class="options" data-item="vote-0714-afternoon">
+
+            <div class="option" role="button" tabindex="0" data-choice="별마당 도서관">
+              <div class="opt-top">
+                <div class="opt-name">별마당 도서관 <span class="opt-kind">코엑스 · 삼성동</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">스타필드 코엑스몰 한가운데 13m 대형 서가 3개, 책 5만 권의 무료 개방 도서관. 전관 실내 냉방에 앉을 곳 많고, 몰 구경까지 한 번에</p>
+              <p class="opt-meta">10:30~22:00 · 무료 · 잠실역 → 삼성역 2호선 3정거장 (약 10분)</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/별마당도서관" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="성수동 카페거리">
+              <div class="opt-top">
+                <div class="opt-name">성수동 카페거리 <span class="opt-kind">성수 · 연무장길</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">성수역 4번 출구 도보 3분, 연무장길 따라 브랜드 팝업스토어·카페가 이어지는 트렌드 동네. 7월엔 토이 스토리 협업 팝업 등 진행 중 (야외 이동 많아 더위 감안)</p>
+              <p class="opt-meta">잠실역 → 성수역 2호선 5정거장 (약 15분, 환승 없음)</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/성수동 카페거리" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
+
+            <div class="option" role="button" tabindex="0" data-choice="집에서 휴식">
+              <div class="opt-top">
+                <div class="opt-name">잠실 복귀 후 휴식</div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">점심 먹고 집으로 돌아와 쉬었다가 저녁만 일찍 나가는 안. 엄마·이모 체력 상태 보고 당일 결정 가능</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+              </div>
+            </div>
+
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+        </li>
 
-<!-- ============ 7/14 ============ -->
-<section class="panel" id="panel-d14" hidden>
-  <div class="day-head">
-    <div class="wrap">
-      <p class="eyebrow">7월 14일 화요일 · 한남 → 광화문</p>
-      <h2>걸어 들어가는 전시만 골라서</h2>
-      <p class="sub">가만히 서서 보는 명화 대신 공간 속으로 들어가는 몰입형·체험형으로만. 오전엔 리움 설치미술, 오후엔 한남 감성 전시, 밤엔 광화문 미디어아트 피날레예요.</p>
-    </div>
-  </div>
+        <li class="tl-item">
+          <div class="tl-time">18:00~</div>
+          <div class="tl-label">저녁 — 석촌호수·송리단길 후보 3곳 <span class="badge">투표</span></div>
+          <div class="options" data-item="vote-0714-dinner">
 
-  <div class="wx">
-    <div class="wrap">
-      <h3>시간별 날씨</h3>
-      <p class="src">서울 잠실 기준 · Open-Meteo · 옆으로 밀어서 더 보기</p>
-      <div class="wx-strip" data-day="2026-07-14" data-from="9" data-to="21"><p class="wx-err">예보 불러오는 중…</p></div>
-    </div>
-  </div>
+            <div class="option" role="button" tabindex="0" data-choice="루반로즈">
+              <div class="opt-top">
+                <div class="opt-name">루반로즈 <span class="opt-kind">이탈리안 · 호수뷰</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">석촌호수 + 롯데타워 뷰, 루프탑 있음. 마지막 밤 분위기용 최적</p>
+              <p class="opt-meta">구글 4.5점 (리뷰 175개) · 매일 11:00~15:00, 17:00~22:00</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/루반로즈 석촌호수" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
 
-  <div class="course">
-    <div class="wrap">
-      <h3>추천 코스</h3>
+            <div class="option" role="button" tabindex="0" data-choice="마신내">
+              <div class="opt-top">
+                <div class="opt-name">마신내 <span class="opt-kind">돈카츠·일식</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">"서울 2주 여행 중 최고 식사"라는 외국인 후기가 있을 정도. 양 푸짐</p>
+              <p class="opt-meta">구글 4.8점 (리뷰 904개) · 17:00~21:00</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/마신내 석촌" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
 
-      <article class="place">
-        <p class="when">10:30 – 12:30 · 사전예약 필수 · 몰입형 설치</p>
-        <h4>리움미술관</h4>
-        <p class="desc">기획전은 그림이 아니라 <b>방 전체가 작품</b> — 설치미술 공간 속을 직접 걸어 들어가는 몰입형 전시라 사진 찍기도 좋아요. 이어서 무료 고미술 상설관(국보 36점·보물 96점)까지.</p>
-        <ul class="facts">
-          <li><b>기획전 「다른 공간 안으로」</b> ~11/29 · 유료(요금은 예매 페이지 확인)</li>
-          <li><b>고미술 상설전 (M1)</b> 무료 · 예약제</li>
-        </ul>
-        <p class="quote">"교과서에서 보던 작품이 눈앞에" — 조용하고 품격 있는 분위기.</p>
-        <ul class="tips">
-          <li>예약제라 붐비지 않고, 휠체어 무료 대여도 있어요.</li>
-          <li class="warn"><b>예약은 지금 바로!</b> 관람 14일 전부터 오픈, 인기 시간대 조기 마감.</li>
-        </ul>
-        <div class="cta">
-          <a class="pill" href="https://map.naver.com/p/search/리움미술관" target="_blank" rel="noopener">네이버지도</a>
-          <a class="textlink" href="https://ticket.leeum.org/" target="_blank" rel="noopener">예약하기 ↗</a>
-        </div>
-      </article>
+            <div class="option" role="button" tabindex="0" data-choice="세컨드포레스트 송리단길점">
+              <div class="opt-top">
+                <div class="opt-name">세컨드포레스트 송리단길점 <span class="opt-kind">이탈리안</span></div>
+                <span class="opt-mine">✓ 내 선택</span>
+              </div>
+              <p class="opt-desc">들깨크림파스타 시그니처, 송리단길 감성. 웨이팅 있는 편</p>
+              <p class="opt-meta">구글 4.4점 (리뷰 109개) · 11:30~21:00</p>
+              <div class="opt-foot">
+                <span class="tally" data-tally></span>
+                <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/세컨드포레스트 송리단길" target="_blank" rel="noopener">지도</a>
+              </div>
+            </div>
 
-      <div class="tl-move">🚇 잠실 → 2호선 15분 → 신당 → 6호선 12분 → 한강진 → 도보 5분 · <b>약 35분</b></div>
-
-      <div class="vote" data-item="d14-lunch">
-        <div class="vote-head"><span class="when-chip">12:40</span><h4>한남 점심, 어디로?</h4><span class="vhint">탭해서 투표</span></div>
-        <p class="vnote">둘 다 리움에서 도보권이에요.</p>
-        <div class="choices">
-          <div class="choice" data-choice="parc" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">빠르크 Parc</span><span class="c-count">0표</span></div>
-            <p class="c-meta">제철 한식 반상 · 11:30~ · 브레이크 15:20~17:30</p>
-            <p class="c-desc">"이태원·한남 주민들의 단골집에서 만나는 진짜 한식" — 정갈하고 조용해요.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/한남동 빠르크" target="_blank" rel="noopener">네이버지도</a></div>
           </div>
-          <div class="choice" data-choice="dammi" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">일상담미 한남</span><span class="c-count">0표</span></div>
-            <p class="c-meta">나인원한남 고메이494 · 한우등심구이반상 44,000원</p>
-            <p class="c-desc">빠르크가 붐빌 때의 대안이자, 조금 더 든든한 한 상.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/일상담미 한남" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-        </div>
-      </div>
+        </li>
 
-      <div class="tl-move">🚶 점심에서 한남 골목 안 · 도보 이동</div>
+        <li class="tl-item">
+          <div class="tl-time">식후</div>
+          <div class="tl-label">석촌호수 야간 산책 <span class="opt-kind">선택</span></div>
+          <p class="tl-move">해 진 후라 더위 부담 적음, 롯데타워 야경</p>
+        </li>
+      </ol>
 
-      <div class="vote" data-item="d14-exhibit">
-        <div class="vote-head"><span class="when-chip">14:00 – 15:40</span><h4>오후 전시, 취향대로 골라요</h4><span class="vhint">탭해서 투표</span></div>
-        <p class="vnote">인상주의를 고르면 오후를 광화문에서 쭉 보내면 돼요(광화문역 직결) — 저녁 동선은 그대로. 피카소·브라크가 좋다면 63빌딩 퐁피두센터 한화 「큐비스트」(28,000원, 화요일 개관)도 있지만 여의도라 동선이 늘어나요.</p>
-        <div class="choices">
-          <div class="choice" data-choice="seesaw" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">그라운드시소 한남 「여름을 닮은 우리」</span><span class="c-count">0표</span></div>
-            <p class="c-meta">~9/27 · 성인 20,000원 · 10:00~19:00(입장 마감 18시) · 연중무휴 · 전관 냉방</p>
-            <p class="c-desc">여름을 그린 수채화 140여 점을 포토존·연출 공간과 함께 — 인증샷 찍고 굿즈 구경하며 노는 감성 전시. 규모가 아담해 1시간~1시간 30분이면 충분, 체력 부담 없음.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/그라운드시소 한남" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-          <div class="choice" data-choice="impression" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">세종문화회관 「인상주의를 넘어」</span><span class="c-count">0표</span></div>
-            <p class="c-meta">~8/23 · 23,000원 · 광화문역 직결</p>
-            <p class="c-desc">르누아르·드가·고흐·마티스·피카소 — 명화 감상이 더 끌린다면 이쪽으로.</p>
-            <div class="c-foot"><span class="c-who"></span><a class="maplink" href="https://map.naver.com/p/search/세종문화회관" target="_blank" rel="noopener">네이버지도</a></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-move">🚕 한남 → 광화문 택시 20분(4인이면 지하철값) · 버스 402·405도 가능</div>
-
-      <article class="place">
-        <p class="when">16:10 – 18:00 · 지하 연결</p>
-        <h4>교보문고 광화문점 &amp; 카페</h4>
-        <p class="desc">광화문 도착하면 교보문고에서 책 구경, 다리 아프면 카페에서 휴식 — 저녁 전까지 시원하게 쉬어 가는 구간이에요.</p>
-        <div class="cta"><a class="pill" href="https://map.naver.com/p/search/교보문고 광화문점" target="_blank" rel="noopener">네이버지도</a></div>
-      </article>
-
-      <div class="tl-move">🚶 같은 광화문 권역 · 도보 이동</div>
-
-      <article class="place">
-        <p class="when">18:00 저녁 · 미쉐린 빕구르망</p>
-        <h4>미진 본점 — 냉메밀로 마무리</h4>
-        <p class="desc">1954년부터 이어온 광화문 메밀 노포. 냉메밀 + 보쌈 + 파전이면 더운 날 마무리로 완벽해요. 광화문 저녁의 확정 후보는 여기 한 곳 — 투표 없이 추천으로 둘게요.</p>
-        <ul class="facts"><li><b>영업</b> 매일 10:30~21:00 · 주문 마감 20:30</li></ul>
-        <ul class="tips"><li class="warn">유명한 만큼 웨이팅 — 18시 전 도착 추천.</li></ul>
-        <div class="cta"><a class="pill" href="https://map.naver.com/p/search/광화문 미진 본점" target="_blank" rel="noopener">네이버지도</a></div>
-      </article>
-
-      <div class="tl-move">🚶 미진에서 도보 3분 — 광화문역 9번 출구 진입로</div>
-
-      <article class="place">
-        <p class="when">19:00 피날레 · 무료 · 미디어아트</p>
-        <h4>해치마당 미디어월 「여름, 잠시 다른 세계」</h4>
-        <p class="desc">광화문광장 지하 진입로의 대형 미디어월에서 여름밤 미디어아트 8작품을 무료로. 저녁이라 한결 선선하고 사진 찍기도 좋아요.</p>
-        <ul class="facts"><li><b>2026 해치마당 미디어월 두 번째 전시</b> 7/1~8/31 · 매일 18:00~21:00 · 무료(서울시 운영)</li></ul>
-        <ul class="tips">
-          <li>보고 나서 광화문광장·청계천 야경까지 10분만 걸어도 좋아요.</li>
-          <li class="warn">비가 많이 오면 짧게 보고 이동.</li>
-        </ul>
-        <div class="cta"><a class="pill" href="https://map.naver.com/p/search/광화문광장 해치마당" target="_blank" rel="noopener">네이버지도</a></div>
-      </article>
-
-      <div class="tl-move">🏠 광화문 → 도보 10분 → 시청 → 2호선 35분 → 잠실 · <b>약 45분</b></div>
-
-    </div>
-  </div>
-
-  <div class="confirm-sect">
-    <div class="wrap">
-      <div class="vote confirm" data-item="d14-confirm">
-        <h3>7/14 코스, 이대로 갈까요?</h3>
-        <p>일정이 전부 실내·역 직결이라 비가 와도 코스는 그대로 — 우산만 챙기면 돼요.</p>
-        <div class="choices">
-          <div class="choice" data-choice="good" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">👍 좋아요, 이대로 가요</span><span class="c-count">0표</span></div>
-            <div class="c-foot"><span class="c-who"></span></div>
-          </div>
-          <div class="choice" data-choice="adjust" role="button" tabindex="0" aria-pressed="false">
-            <div class="c-top"><span class="c-name">🤔 조금 조정하고 싶어요</span><span class="c-count">0표</span></div>
-            <div class="c-foot"><span class="c-who"></span></div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
 
 </main>
 
-<!-- ============ CHECKLIST ============ -->
-<section class="check">
-  <div class="wrap">
-    <h2>출발 전 예약 체크</h2>
-    <p class="sub">투표가 모이면 아래 순서로 예약할게요 — 1번이 제일 급해요.</p>
-    <ol>
-      <li><b>리움 14일(화) 오전 예약</b> — ticket.leeum.org, 4명. 관람 14일 전부터 오픈이라 지금 바로!</li>
-      <li><b>국립중앙박물관 태국전 예매</b> — museum.go.kr, 관람 전날까지.</li>
-      <li><b>그라운드시소 한남 예매</b> — 현장 구매도 되지만 온라인 예매하면 대기 없이 입장. (인상주의로 바뀌면 세종문화회관 예매)</li>
-      <li><b>한강회관 점심 전화 예약</b> — 지도 앱 전화 버튼으로 바로.</li>
-      <li><b>더현대 팝업 라인업 확인</b> — 인스타 @weekly_thehyundai.</li>
-    </ol>
-  </div>
-</section>
-
 <footer>
-  <div class="wrap">
-    <p>요금·전시·영업 정보는 2026년 7월 10일 조사 기준 — 방문 전 지도 링크에서 한 번씩 확인해 주세요. 날씨는 페이지를 열 때마다 Open-Meteo 예보로 자동 갱신됩니다. 투표는 언제든 다시 눌러 바꿀 수 있어요.</p>
-  </div>
+  <p>메뉴와 코스는 투표 결과 보고 같이 정해요.<br>투표는 언제든 다시 누르면 바꿀 수 있어요.</p>
 </footer>
 
-<!-- ============ NAME MODAL ============ -->
-<div class="modal" id="nameModal" hidden>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="nmTitle">
-    <h3 id="nmTitle">누구세요? 🙋</h3>
-    <p>이름을 고르면 투표에 이름이 표시돼요. 이 기기에 기억됩니다.</p>
+<!-- ===================== 이름 선택 모달 ===================== -->
+<div class="scrim" id="nameModal" role="dialog" aria-modal="true" aria-labelledby="nameModalTitle">
+  <div class="sheet">
+    <h3 id="nameModalTitle">누구인지 알려주세요</h3>
+    <p>투표할 때 이름으로 집계돼요. 나중에 '변경'으로 바꿀 수 있어요.</p>
     <div class="name-grid">
-      <button class="name-btn" data-name="연정">연정</button>
-      <button class="name-btn" data-name="사촌동생">사촌동생</button>
-      <button class="name-btn" data-name="엄마">엄마</button>
-      <button class="name-btn" data-name="이모">이모</button>
+      <button type="button" class="name-btn" data-name="연정">연정</button>
+      <button type="button" class="name-btn" data-name="금주">금주</button>
+      <button type="button" class="name-btn" data-name="엄마">엄마</button>
+      <button type="button" class="name-btn" data-name="이모">이모</button>
     </div>
-    <button class="modal-skip" id="modalSkip">일단 구경만 할게요</button>
+    <p class="etc-label">여기 없으면 이름을 직접 적어 주세요</p>
+    <div class="etc-row">
+      <input type="text" id="etcName" class="etc-input" maxlength="10" placeholder="이름 입력" autocomplete="off">
+      <button type="button" class="btn-fill" id="etcGo">확인</button>
+    </div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
-"use strict";
+  'use strict';
 
-/* ================= 설정 — 이 두 줄만 본인 값으로 교체 ================= */
-var SUPABASE_URL      = "PASTE_YOUR_SUPABASE_URL";      /* 예: https://xxxx.supabase.co */
-var SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY"; /* Project Settings → API → anon public */
-/* ==================================================================== */
+  /* ---------- Supabase ---------- */
+  var SUPABASE_URL = 'https://dntdxrctmpykebipunye.supabase.co';
+  var REST_URL = 'https://dntdxrctmpykebipunye.supabase.co/rest/v1/';
+  var ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRudGR4cmN0bXB5a2ViaXB1bnllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MTA3NjgsImV4cCI6MjA5OTI4Njc2OH0.WGNP2FIl3c_Ga9-hwdDcOofaxfXpI1LzSKwjLjqbKIw';
+  var sb = (window.supabase && window.supabase.createClient)
+    ? window.supabase.createClient(SUPABASE_URL, ANON_KEY)
+    : null;
 
-var sbReady = /^https:\/\/.+/.test(SUPABASE_URL) && SUPABASE_ANON_KEY.indexOf("PASTE") === -1 && SUPABASE_ANON_KEY.length > 30;
-var sb = null; /* supabase-js는 맨 아래에서 비동기 로드 — CDN이 느려도 페이지는 즉시 동작 */
+  var LS_KEY = 'seoul-trip-voter';
+  var votes = [];           // [{voter_name, item_id, choice}]
+  var pendingVote = null;   // 이름 미선택 상태에서 누른 투표
+  var pollTimer = null;
+  var activeTab = 'd0713';
 
-var voter = localStorage.getItem("trip_voter") || "";
-var votes = {}; /* { item_id: { voter_name: choice } } */
-
-/* ---------- 탭 ---------- */
-var tabs = document.querySelectorAll(".tab");
-function activate(id, scroll){
-  tabs.forEach(function(t){
-    var on = t.dataset.target === id;
-    t.classList.toggle("on", on);
-    t.setAttribute("aria-selected", on ? "true" : "false");
-  });
-  document.querySelectorAll(".panel").forEach(function(p){ p.hidden = (p.id !== id); });
-  if (scroll) {
-    var panel = document.getElementById(id);
-    var y = panel.getBoundingClientRect().top + window.pageYOffset - document.getElementById("tabbar").offsetHeight;
-    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+  /* ---------- 유틸 ---------- */
+  function $(sel, root){ return (root || document).querySelector(sel); }
+  function $all(sel, root){ return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function myName(){ return localStorage.getItem(LS_KEY) || ''; }
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
   }
-  try { history.replaceState(null, "", "#" + id); } catch (e) {}
-}
-tabs.forEach(function(t){ t.addEventListener("click", function(){ activate(t.dataset.target, true); }); });
-document.querySelectorAll(".sum-card").forEach(function(c){
-  c.addEventListener("click", function(){ activate(c.dataset.target, true); });
-});
-if (/^#panel-d1[234]$/.test(location.hash)) activate(location.hash.slice(1), false);
 
-/* ---------- 투표자 선택 ---------- */
-var modal = document.getElementById("nameModal");
-var chip = document.getElementById("voterChip");
-function renderChip(){ chip.textContent = voter ? "🙋 " + voter : "🙋 이름 선택"; }
-function openModal(){ modal.hidden = false; }
-chip.addEventListener("click", openModal);
-modal.addEventListener("click", function(e){ if (e.target === modal) modal.hidden = true; });
-document.getElementById("modalSkip").addEventListener("click", function(){ modal.hidden = true; });
-document.querySelectorAll(".name-btn").forEach(function(b){
-  b.addEventListener("click", function(){
-    voter = b.dataset.name;
-    localStorage.setItem("trip_voter", voter);
-    modal.hidden = true;
-    renderChip(); renderVotes();
-  });
-});
-renderChip(); /* 이름 선택은 첫 투표 시점에 요청 — 열자마자 가로막지 않기 */
+  var toastTimer = null;
+  function toast(msg){
+    var el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('on'); }, 2600);
+  }
 
-/* ---------- 투표 렌더 ---------- */
-function renderVotes(){
-  document.querySelectorAll(".vote").forEach(function(block){
-    var item = block.dataset.item;
-    var byVoter = votes[item] || {};
-    block.querySelectorAll(".choice").forEach(function(ch){
-      var c = ch.dataset.choice;
-      var who = Object.keys(byVoter).filter(function(v){ return byVoter[v] === c; });
-      ch.querySelector(".c-count").textContent = who.length + "표";
-      ch.querySelector(".c-who").textContent = who.join(" · ");
-      var mine = !!(voter && byVoter[voter] === c);
-      ch.classList.toggle("selected", mine);
-      ch.setAttribute("aria-pressed", mine ? "true" : "false");
+  /* ---------- 탭 ---------- */
+  function showTab(id, scroll){
+    $all('.tab').forEach(function(b){
+      var on = b.dataset.tab === id;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
     });
+    $all('.day').forEach(function(s){
+      s.classList.toggle('on', s.id === 'day-' + id);
+    });
+    activeTab = id;
+    syncMap(id);
+    if (scroll) {
+      $('#tabbar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+  $all('.tab').forEach(function(b){
+    b.addEventListener('click', function(){ showTab(b.dataset.tab, false); });
   });
-}
+  $all('.sum-card').forEach(function(c){
+    c.addEventListener('click', function(){ showTab(c.dataset.goto, true); });
+  });
+  showTab('d0713', false);
 
-/* ---------- 로컬 저장(서버 미연결 시) ---------- */
-function loadLocal(){
-  try { votes = JSON.parse(localStorage.getItem("trip_votes") || "{}"); } catch (e) { votes = {}; }
-}
-function saveLocal(){
-  try { localStorage.setItem("trip_votes", JSON.stringify(votes)); } catch (e) {}
-}
+  /* ---------- 이름 선택 ---------- */
+  function renderVoterChip(){
+    $('#voterName').textContent = myName() || '선택 안 됨';
+  }
+  function openNameModal(){ $('#nameModal').classList.add('on'); }
+  function closeNameModal(){ $('#nameModal').classList.remove('on'); }
 
-/* ---------- Supabase ---------- */
-var pending = {}, queued = {};
-function anyPending(){
-  for (var k in pending) if (pending[k]) return true;
-  return false;
-}
+  function setVoter(name){
+    localStorage.setItem(LS_KEY, name);
+    renderVoterChip();
+    closeNameModal();
+    renderVotes();
+    if (pendingVote) {
+      var pv = pendingVote; pendingVote = null;
+      castVote(pv.item, pv.choice);
+    }
+  }
+  $all('.name-btn').forEach(function(b){
+    b.addEventListener('click', function(){ setVoter(b.dataset.name); });
+  });
+  function submitEtcName(){
+    var v = $('#etcName').value.trim();
+    if (!v) { toast('이름을 입력해 주세요.'); return; }
+    setVoter(v);
+    $('#etcName').value = '';
+  }
+  $('#etcGo').addEventListener('click', submitEtcName);
+  $('#etcName').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') { e.preventDefault(); submitEtcName(); }
+  });
+  // 이미 이름이 있으면 배경 탭으로 모달 닫기 가능
+  $('#nameModal').addEventListener('click', function(e){
+    if (e.target === e.currentTarget && myName()) { closeNameModal(); }
+  });
+  $('#changeVoter').addEventListener('click', openNameModal);
+  renderVoterChip();
+  if (!myName()) openNameModal();
 
-function refresh(){
-  if (!sb) return Promise.resolve();
-  return sb.from("votes")
-    .select("voter_name,item_id,choice,created_at")
-    .order("created_at", { ascending: true })
-    .then(function(res){
-      if (res.error || !res.data) return;
-      var v = {};
-      res.data.forEach(function(r){
-        if (!v[r.item_id]) v[r.item_id] = {};
-        if (r.choice) v[r.item_id][r.voter_name] = r.choice; /* 중복 행은 최신이 덮어씀 */
-        else delete v[r.item_id][r.voter_name]; /* 빈 choice = 취소 */
+  /* ---------- 투표 데이터 ---------- */
+  function restHeaders(json){
+    var h = { apikey: ANON_KEY, Authorization: 'Bearer ' + ANON_KEY };
+    if (json) { h['Content-Type'] = 'application/json'; }
+    return h;
+  }
+
+  function fetchVotes(){
+    var p;
+    if (sb) {
+      p = sb.from('votes').select('voter_name,item_id,choice').then(function(res){
+        if (res.error) { throw res.error; }
+        return res.data;
       });
-      /* 내 투표가 서버로 가는 중이면 낙관적 상태를 유지 (폴링이 되돌리지 않게) */
-      if (voter) {
-        for (var item in pending) {
-          if (!pending[item] && queued[item] === undefined) continue;
-          if (!v[item]) v[item] = {};
-          if (votes[item] && votes[item][voter] !== undefined) v[item][voter] = votes[item][voter];
-          else delete v[item][voter];
-        }
-      }
-      votes = v;
+    } else {
+      p = fetch(REST_URL + 'votes?select=voter_name,item_id,choice', { headers: restHeaders(false) })
+        .then(function(r){ if (!r.ok) { throw new Error('HTTP ' + r.status); } return r.json(); });
+    }
+    return p.then(function(data){
+      votes = data || [];
       renderVotes();
-    });
-}
+    }).catch(function(){ /* 다음 폴링/이벤트에서 재시도 */ });
+  }
 
-function sendVote(item, choice){
-  pending[item] = true;
-  sb.from("votes").select("id").eq("voter_name", voter).eq("item_id", item)
-    .order("created_at", { ascending: false }).limit(1)
-    .then(function(res){
-      if (res.error) throw res.error; /* 조회 실패를 '행 없음'으로 오인해 중복 insert 하지 않기 */
-      var rows = res.data || [];
-      if (rows.length) return sb.from("votes").update({ choice: choice }).eq("id", rows[0].id);
-      return sb.from("votes").insert({ voter_name: voter, item_id: item, choice: choice });
-    })
-    .then(function(res){ if (res && res.error) throw res.error; })
-    .catch(function(){})
-    .then(function(){
-      pending[item] = false;
-      if (queued[item] !== undefined && queued[item] !== choice) {
-        var next = queued[item];
-        delete queued[item];
-        sendVote(item, next); /* 저장 중에 바뀐 최신 선택을 이어서 전송 */
-      } else {
-        delete queued[item];
-        refresh();
-      }
-    });
-}
+  function upsertVote(row){
+    if (sb) {
+      return sb.from('votes').upsert(row, { onConflict: 'voter_name,item_id' }).then(function(res){
+        if (res.error) { throw res.error; }
+      });
+    }
+    return fetch(REST_URL + 'votes?on_conflict=voter_name,item_id', {
+      method: 'POST',
+      headers: (function(){ var h = restHeaders(true); h.Prefer = 'resolution=merge-duplicates'; return h; })(),
+      body: JSON.stringify(row)
+    }).then(function(r){ if (!r.ok) { throw new Error('HTTP ' + r.status); } });
+  }
 
-function castVote(item, choice){
-  if (!voter) { openModal(); return; }
-  if (!votes[item]) votes[item] = {};
-  var same = votes[item][voter] === choice;
-  if (same) delete votes[item][voter]; /* 같은 선택 다시 탭 → 취소 */
-  else votes[item][voter] = choice;    /* 낙관적 반영 */
-  renderVotes();
-  var effective = same ? "" : choice;  /* 취소는 빈 값으로 저장 (RLS에 delete 권한 없음) */
-  if (!sb) { saveLocal(); return; }
-  if (pending[item]) { queued[item] = effective; return; } /* 저장 중이면 최신 선택을 큐에 */
-  sendVote(item, effective);
-}
-
-document.querySelectorAll(".choice").forEach(function(ch){
-  ch.addEventListener("click", function(e){
-    if (e.target.closest("a, .c-foot")) return; /* 지도 링크·하단 줄은 투표 아님 (오터치 방지) */
-    castVote(ch.closest(".vote").dataset.item, ch.dataset.choice);
-  });
-  ch.addEventListener("keydown", function(e){
-    if (e.target.closest("a")) return; /* 지도 링크 위에서는 Enter가 링크를 열게 */
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ch.click(); }
-  });
-});
-
-function startSync(){
-  refresh();
-  try {
-    sb.channel("votes-rt")
-      .on("postgres_changes", { event: "*", schema: "public", table: "votes" }, function(){ refresh(); })
-      .subscribe();
-  } catch (e) {}
-  setInterval(function(){ if (!anyPending()) refresh(); }, 10000); /* realtime 미활성 대비 10초 폴링 */
-}
-function startLocal(){
-  document.getElementById("sbNotice").hidden = false;
-  loadLocal();
-  renderVotes();
-}
-if (sbReady) {
-  var cdn = document.createElement("script");
-  cdn.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-  cdn.onload = function(){
-    if (!window.supabase) { startLocal(); return; }
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    startSync();
-  };
-  cdn.onerror = startLocal;
-  document.head.appendChild(cdn);
-} else {
-  startLocal();
-}
-
-/* ---------- 날씨 (Open-Meteo) ---------- */
-var WX_URL = "https://api.open-meteo.com/v1/forecast"
-  + "?latitude=37.51&longitude=127.10"
-  + "&hourly=temperature_2m,precipitation_probability"
-  + "&timezone=Asia%2FSeoul"
-  + "&start_date=2026-07-12&end_date=2026-07-14";
-
-function renderWeather(data){
-  document.querySelectorAll(".wx-strip").forEach(function(strip){
-    if (!data || !data.hourly || !data.hourly.time) {
-      strip.innerHTML = '<p class="wx-err">예보를 불러오지 못했어요 — 잠시 후 새로고침 해 주세요.</p>';
+  function castVote(itemId, choice){
+    if (!myName()) {
+      pendingVote = { item: itemId, choice: choice };
+      openNameModal();
       return;
     }
-    var day = strip.dataset.day, from = +strip.dataset.from, to = +strip.dataset.to;
-    var H = data.hourly, html = "";
-    H.time.forEach(function(t, i){
-      if (t.indexOf(day) !== 0) return;
-      var h = +t.slice(11, 13);
-      if (h < from || h > to) return;
-      var pop = H.precipitation_probability[i];
-      var rawTemp = H.temperature_2m[i];
-      if (pop == null || rawTemp == null) return; /* 결측 시간은 0°로 둔갑시키지 않고 건너뜀 */
-      var temp = Math.round(rawTemp);
-      html += '<div class="wx-chip' + (pop >= 50 ? " rainy" : "") + '">'
-            + '<span class="wx-h">' + h + '시</span>'
-            + '<span class="wx-t">' + temp + '°</span>'
-            + '<span class="wx-p">💧' + pop + '%</span></div>';
+    var name = myName();
+    // 낙관적 갱신
+    votes = votes.filter(function(v){ return !(v.voter_name === name && v.item_id === itemId); });
+    votes.push({ voter_name: name, item_id: itemId, choice: choice });
+    renderVotes();
+    upsertVote({ voter_name: name, item_id: itemId, choice: choice }).catch(function(err){
+      var msg = (err && err.message) ? err.message : '';
+      if (msg.indexOf('voter_name_check') !== -1 || msg.indexOf('check constraint') !== -1) {
+        toast('"' + name + '" 이름은 아직 등록이 안 돼 있어요. 연정에게 알려 주세요!');
+      } else {
+        toast('투표 저장에 실패했어요. 잠시 후 다시 눌러주세요.');
+      }
+      fetchVotes();
     });
-    strip.innerHTML = html || '<p class="wx-err">해당 날짜의 시간별 예보가 아직 없어요.</p>';
-  });
-}
+  }
 
-fetch(WX_URL)
-  .then(function(r){ if (!r.ok) throw new Error("http " + r.status); return r.json(); })
-  .then(function(data){
-    try { localStorage.setItem("wx_cache", JSON.stringify(data)); } catch (e) {}
-    renderWeather(data);
-  })
-  .catch(function(){
-    var cached = null;
-    try { cached = JSON.parse(localStorage.getItem("wx_cache") || "null"); } catch (e) {}
-    renderWeather(cached);
+  function renderVotes(){
+    var name = myName();
+    $all('.options').forEach(function(group){
+      var itemId = group.dataset.item;
+      $all('.option', group).forEach(function(opt){
+        var choice = opt.dataset.choice;
+        var rows = votes.filter(function(v){ return v.item_id === itemId && v.choice === choice; });
+        var mine = rows.some(function(v){ return v.voter_name === name; });
+        opt.classList.toggle('selected', mine);
+        var tally = $('[data-tally]', opt);
+        if (tally) {
+          if (rows.length === 0) {
+            tally.innerHTML = '<b>0표</b>';
+          } else {
+            var names = rows.map(function(v){ return esc(v.voter_name); }).join(', ');
+            tally.innerHTML = '<b>' + rows.length + '표</b> <span class="names">· ' + names + '</span>';
+          }
+        }
+      });
+    });
+  }
+
+  /* ---------- 투표 클릭 ---------- */
+  $all('.option').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      castVote(opt.closest('.options').dataset.item, opt.dataset.choice);
+    });
+    opt.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        opt.click();
+      }
+    });
+  });
+  // 지도 링크는 투표로 전파 금지
+  $all('.option a').forEach(function(a){
+    a.addEventListener('click', function(e){ e.stopPropagation(); });
   });
 
+  /* ---------- 실시간 + 폴링 폴백 ---------- */
+  function startPolling(){
+    if (pollTimer) { return; }
+    pollTimer = setInterval(fetchVotes, 10000);
+  }
+  function stopPolling(){
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  }
+
+  fetchVotes();
+  if (sb) {
+    var subscribed = false;
+    sb.channel('votes-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, function(){ fetchVotes(); })
+      .subscribe(function(status){
+        if (status === 'SUBSCRIBED') { subscribed = true; stopPolling(); }
+        if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') { startPolling(); }
+      });
+    setTimeout(function(){ if (!subscribed) { startPolling(); } }, 8000);
+  } else {
+    startPolling();
+    toast('실시간 연결 대신 10초마다 새로고침해요.');
+  }
+
+  /* ---------- 코스 지도 (Leaflet + OpenStreetMap) ---------- */
+  var NM = 'https://map.naver.com/p/search/';
+  var MAPS = {
+    d0713: { el: 'map-d0713', map: null, spots: [
+      { pin: '1', name: '국립중앙박물관', sub: '10:00~13:00', lat: 37.5240, lng: 126.9804, url: NM + '국립중앙박물관' },
+      { name: '백옥 용산', sub: '점심 후보', lat: 37.5228, lng: 126.9720, url: NM + '백옥 용산' },
+      { name: '스즈란테이 본점', sub: '점심 후보', lat: 37.5222, lng: 126.9700, url: NM + '스즈란테이 이촌' },
+      { name: '르미야', sub: '점심 후보', lat: 37.5218, lng: 126.9735, url: NM + '르미야 이촌' },
+      { name: '더현대 서울', sub: '오후 후보 · 저녁 식품관', lat: 37.5259, lng: 126.9285, url: NM + '더현대서울' },
+      { name: '광장시장', sub: '오후 후보', lat: 37.5700, lng: 126.9996, url: NM + '광장시장' }
+    ]},
+    d0714: { el: 'map-d0714', map: null, spots: [
+      { pin: '1', name: '빛의 시어터', sub: '10:00~12:00', lat: 37.5551, lng: 127.1100, url: NM + '빛의시어터' },
+      { name: '쌤쌤쌤 롯데월드몰점', sub: '점심 후보', lat: 37.5127, lng: 127.1022, url: NM + '쌤쌤쌤 롯데월드몰' },
+      { name: '꽃, 궁', sub: '점심 후보', lat: 37.5123, lng: 127.1031, url: NM + '꽃궁 롯데월드몰' },
+      { name: '분지로', sub: '점심 후보', lat: 37.5119, lng: 127.1025, url: NM + '분지로 롯데월드몰' },
+      { name: '별마당 도서관', sub: '오후 후보', lat: 37.5110, lng: 127.0590, url: NM + '별마당도서관' },
+      { name: '성수동 카페거리', sub: '오후 후보', lat: 37.5427, lng: 127.0557, url: NM + '성수동 카페거리' },
+      { name: '루반로즈', sub: '저녁 후보', lat: 37.5107, lng: 127.1054, url: NM + '루반로즈 석촌호수' },
+      { name: '마신내', sub: '저녁 후보', lat: 37.5060, lng: 127.1050, url: NM + '마신내 석촌' },
+      { name: '세컨드포레스트 송리단길점', sub: '저녁 후보', lat: 37.5085, lng: 127.1070, url: NM + '세컨드포레스트 송리단길' },
+      { pin: '2', name: '석촌호수 야간 산책', sub: '식후 선택', lat: 37.5093, lng: 127.1032, url: null }
+    ]}
+  };
+
+  function initMap(id){
+    var cfg = MAPS[id];
+    if (!cfg || cfg.map) { return; }
+    var el = document.getElementById(cfg.el);
+    if (!el) { return; }
+    if (!window.L) {
+      el.innerHTML = '<p class="w-msg" style="padding:16px">지도를 불러오지 못했어요.</p>';
+      return;
+    }
+    var map = L.map(cfg.el, { scrollWheelZoom: false });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+    }).addTo(map);
+    var bounds = [];
+    cfg.spots.forEach(function(s){
+      var size = s.pin ? 26 : 18;
+      var icon = L.divIcon({
+        className: 'pinwrap',
+        html: s.pin ? '<div class="pin-fill">' + s.pin + '</div>' : '<div class="pin-line"></div>',
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
+      });
+      var pop = '<div class="pop-name">' + s.name + '</div><div class="pop-sub">' + s.sub + '</div>'
+        + (s.url ? '<a href="' + s.url + '" target="_blank" rel="noopener">네이버지도 ›</a>' : '');
+      L.marker([s.lat, s.lng], { icon: icon }).addTo(map).bindPopup(pop);
+      bounds.push([s.lat, s.lng]);
+    });
+    map.fitBounds(bounds, { padding: [28, 28] });
+    cfg.map = map;
+  }
+  function syncMap(id){
+    if (typeof MAPS === 'undefined' || !MAPS || !MAPS[id]) { return; }
+    if (MAPS[id].map) {
+      setTimeout(function(){ MAPS[id].map.invalidateSize(); }, 60);
+    } else {
+      setTimeout(function(){ initMap(id); }, 60);
+    }
+  }
+  syncMap(activeTab);
+
+  /* ---------- 날씨 (Open-Meteo) ---------- */
+  var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast'
+    + '?latitude=37.51&longitude=127.10'
+    + '&hourly=temperature_2m,precipitation_probability'
+    + '&timezone=Asia%2FSeoul'
+    + '&start_date=2026-07-13&end_date=2026-07-14';
+
+  var WEATHER_TABS = [
+    { el: 'w-d0713', date: '2026-07-13', from: 9, to: 22 },
+    { el: 'w-d0714', date: '2026-07-14', from: 9, to: 22 }
+  ];
+
+  function weatherFail(){
+    WEATHER_TABS.forEach(function(t){
+      $('#' + t.el).innerHTML = '<p class="w-msg">날씨 정보를 불러오지 못했어요.</p>';
+    });
+  }
+
+  fetch(WEATHER_URL)
+    .then(function(r){ if (!r.ok) { throw new Error('HTTP ' + r.status); } return r.json(); })
+    .then(function(data){
+      var h = data.hourly;
+      if (!h || !h.time) { weatherFail(); return; }
+      WEATHER_TABS.forEach(function(t){
+        var cells = '';
+        for (var i = 0; i < h.time.length; i++) {
+          var ts = h.time[i];
+          if (ts.slice(0, 10) !== t.date) { continue; }
+          var hour = parseInt(ts.slice(11, 13), 10);
+          if (hour < t.from || hour > t.to) { continue; }
+          var temp = Math.round(h.temperature_2m[i]);
+          var pop = h.precipitation_probability[i];
+          cells += '<div class="w-hour">'
+            + '<div class="t">' + hour + '시</div>'
+            + '<div class="c">' + temp + '°</div>'
+            + '<div class="p">💧' + (pop == null ? '-' : pop + '%') + '</div>'
+            + '</div>';
+        }
+        $('#' + t.el).innerHTML = cells || '<p class="w-msg">해당 날짜의 예보가 아직 없어요.</p>';
+      });
+    })
+    .catch(weatherFail);
 })();
 </script>
 </body>
