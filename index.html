@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="서울 여행 7/13–14 — 일정 확인, 실시간 투표, 날씨·지도·예약 체크리스트까지 한 페이지에">
 <meta name="format-detection" content="telephone=no">
 <title>서울 여행</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%B3%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="서울 여행">
 <meta property="og:description" content="일정 확인하고, 가고 싶은 곳에 투표해 주세요">
 <meta property="og:type" content="website">
@@ -13,7 +15,6 @@
 <meta property="og:image" content="https://seoul-wsbn.vercel.app/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root{
     --primary:#0066cc;
@@ -114,7 +115,9 @@
 
   /* ---------- day panels ---------- */
   .day{display:none}
-  .day.on{display:block}
+  .day.on{display:block;animation:dayin .35s ease}
+  @keyframes dayin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){.day.on{animation:none}}
 
   /* dark day-hero tile: the color change IS the divider */
   .day-hero{text-align:center;padding:64px 24px}
@@ -301,6 +304,16 @@
   .chk-txt span{font-size:14px;color:var(--ink-48);letter-spacing:-0.224px;line-height:1.43;display:block;margin-top:4px}
   .chk-side{display:flex;align-items:center;gap:10px;margin-left:auto}
   .chk-btn.selected{border:2px solid var(--primary-focus);color:var(--primary-focus);padding:7px 17px}
+  .pl-vote.selected,.chk-btn.selected{animation:pop .25s ease}
+  @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+  .res-card{background:var(--canvas);border:1px solid var(--hairline);border-radius:18px;padding:6px 20px;margin-top:24px}
+  .res-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 0;border-bottom:1px solid var(--divider);font-size:14px;letter-spacing:-0.224px}
+  .res-row:last-child{border-bottom:none}
+  .res-row span{color:var(--ink-48)}
+  .res-row b{font-weight:600;text-align:right}
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}}
   .mh{display:flex;align-items:center;gap:12px;margin-top:12px;background:var(--parchment);border-radius:11px;padding:12px 14px}
   .mh .mh-ico{font-size:28px;line-height:1}
   .mh .mh-name{font-size:14px;font-weight:600;letter-spacing:-0.224px;line-height:1.29}
@@ -348,6 +361,45 @@
     font-size:14px;letter-spacing:-0.224px;display:none;max-width:calc(100% - 48px);text-align:center;
   }
   .toast.on{display:block}
+
+  /* ---------- 히어로 등장 시퀀스 ---------- */
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .hero > *{opacity:0;animation:rise .55s ease forwards}
+  .hero .eyebrow{animation-delay:0s}
+  .hero h1{animation-delay:.07s}
+  .hero .lead{animation-delay:.14s}
+  .hero .cta{animation-delay:.21s}
+  .hero .voter{animation-delay:.28s}
+  .hero .ptc{animation-delay:.35s}
+  @media (prefers-reduced-motion: reduce){.hero > *{opacity:1;animation:none}}
+
+  /* ---------- 확정 모드 ---------- */
+  .options.has-confirm .option{opacity:.55}
+  .options.has-confirm .option.confirmed{opacity:1}
+  .option.confirmed{border:2px solid var(--primary-focus);padding:23px}
+  .cal-link{display:inline-block;margin-top:16px;font-size:14px;letter-spacing:-0.224px;color:#2997ff;text-decoration:none}
+
+  /* ---------- 다크 모드 ---------- */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ink:#f5f5f7;
+      --ink-80:#d6d6da;
+      --ink-48:#8e8e93;
+      --hairline:#3a3a3c;
+      --divider:#2c2c2e;
+      --canvas:#000000;
+      --parchment:#161618;
+      --pearl:#2c2c2e;
+    }
+    .card,.option,.sum-card,.weather,.mapcard,.pl-row,.chk-row,.res-card,.sheet,.chat-panel{background:#1c1c1e}
+    .tab.on{background:#2c2c2e}
+    .tabbar{background:rgba(22,22,24,0.8)}
+    .btn-fill,.chat-fab,.chat-send{color:#000}
+    .toast{color:#000}
+    .mh,.mimo .bubble,.mimo .avatar,.msg.bot,.rain-note,.badge,.lead-badge{background:#2c2c2e}
+    .w-hour{background:#0e0e10}
+    .leaflet-popup-content-wrapper{background:#1c1c1e;color:#f5f5f7}
+  }
 </style>
 </head>
 <body>
@@ -390,6 +442,10 @@
       </button>
     </div>
 
+    <h2 class="chk-title">지금 1위 한눈에</h2>
+    <p class="chk-sub">'가고 싶어요' 실시간 집계</p>
+    <div class="res-card" id="resultBoard"></div>
+
     <h2 class="chk-title">예약 체크리스트</h2>
     <p class="chk-sub">놓치면 일정이 꼬여요 — 완료한 사람이 눌러 주세요 (모두에게 공유)</p>
     <div class="chk-list">
@@ -428,6 +484,7 @@
     <h2>용산 → 여의도</h2>
     <p class="theme">K-푸드 특별전 보고,<br>밥 잘 먹는 날</p>
     <p class="move">이동: 잠실 → 이촌(국립중앙박물관) 지하철 약 40분 / 택시 25~30분</p>
+    <a class="cal-link" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=서울+여행+DAY1+·+용산·여의도&dates=20260713/20260714&details=일정+페이지:+https://seoul-wsbn.vercel.app/" target="_blank" rel="noopener">📅 구글 캘린더에 추가</a>
   </div>
 
   <div class="day-body">
@@ -599,6 +656,7 @@
     <p class="d-eyebrow">7/14 (화) · DAY 2</p>
     <h2>광진(워커힐) → 잠실 → 시내</h2>
     <p class="theme">몰입형 미디어아트 + 오후 시내 나들이</p>
+    <a class="cal-link" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=서울+여행+DAY2+·+광진·잠실&dates=20260714/20260715&details=일정+페이지:+https://seoul-wsbn.vercel.app/" target="_blank" rel="noopener">📅 구글 캘린더에 추가</a>
   </div>
 
   <div class="day-body">
@@ -927,7 +985,6 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
   'use strict';
@@ -1090,11 +1147,28 @@
     });
   }
   function castWish(itemId){ castToggle(itemId, WISH); }
+  function castConfirm(groupId, wishId){
+    if (myName() !== '연정') { toast('확정은 연정만 할 수 있어요.'); return; }
+    var itemId = 'confirm-' + groupId;
+    var cur = votes.filter(function(v){ return v.item_id === itemId; })[0];
+    var choice = (cur && cur.choice === wishId) ? '취소' : wishId;
+    votes = votes.filter(function(v){ return v.item_id !== itemId; });
+    votes.push({ voter_name: '연정', item_id: itemId, choice: choice });
+    renderVotes();
+    upsertVote({ voter_name: '연정', item_id: itemId, choice: choice }).catch(function(){
+      toast('저장에 실패했어요 — 다시 눌러주세요.');
+      fetchVotes();
+    });
+  }
 
   function renderVotes(){
     var name = myName();
     // 후보 카드: '가고 싶어요' 기준으로 선택 표시 + 집계 + 그룹별 1위 배지
     $all('.options').forEach(function(group){
+      var groupId = group.dataset.item;
+      var confRow = votes.filter(function(v){ return v.item_id === 'confirm-' + groupId && v.choice !== '취소'; })[0];
+      var confirmedWish = confRow ? confRow.choice : null;
+      group.classList.toggle('has-confirm', !!confirmedWish);
       var infos = [];
       $all('.option', group).forEach(function(opt){
         var wishBtn = $('.pl-vote', opt);
@@ -1111,12 +1185,15 @@
             tally.innerHTML = '<b>' + rows.length + '명</b> <span class="names">· ' + names + '</span>';
           }
         }
-        infos.push({ opt: opt, n: rows.length });
+        infos.push({ opt: opt, n: rows.length, wish: wishBtn.dataset.item });
       });
       var max = 0;
       infos.forEach(function(i){ if (i.n > max) { max = i.n; } });
       var leaders = infos.filter(function(i){ return max > 0 && i.n === max; });
       infos.forEach(function(i){
+        var isLead = max > 0 && i.n === max;
+        var isConf = !!confirmedWish && i.wish === confirmedWish;
+        i.opt.classList.toggle('confirmed', isConf);
         var b = $('.lead-badge', i.opt);
         if (!b) {
           b = document.createElement('span');
@@ -1124,9 +1201,26 @@
           var top = $('.opt-top', i.opt);
           if (top) { top.appendChild(b); }
         }
-        var isLead = max > 0 && i.n === max;
-        b.style.display = isLead ? 'inline-block' : 'none';
-        b.textContent = isLead ? (leaders.length > 1 ? '👑 공동 1위' : '👑 현재 1위') : '';
+        b.style.display = (isConf || isLead) ? 'inline-block' : 'none';
+        b.textContent = isConf ? '✅ 확정' : (isLead ? (leaders.length > 1 ? '👑 공동 1위' : '👑 현재 1위') : '');
+        // 확정 버튼 — 연정 전용, 1위(미확정 시) 또는 확정된 카드에 표시
+        var cb = $('.conf-btn', i.opt);
+        var showBtn = name === '연정' && (isConf || (isLead && !confirmedWish));
+        if (showBtn) {
+          if (!cb) {
+            cb = document.createElement('button');
+            cb.type = 'button';
+            cb.className = 'btn-ghost btn-sm conf-btn';
+            var acts = $('.pl-actions', i.opt);
+            if (acts) { acts.appendChild(cb); }
+          }
+          cb.style.display = 'inline-flex';
+          cb.textContent = isConf ? '확정 해제' : '이걸로 확정';
+          cb.dataset.group = groupId;
+          cb.dataset.wish = i.wish;
+        } else if (cb) {
+          cb.style.display = 'none';
+        }
       });
     });
     // 예약 체크리스트
@@ -1160,6 +1254,7 @@
         pEl.textContent = '투표 참여 ' + (doneN.length + extraN) + '명 · 아직 안 한 사람: ' + missing.join(', ');
       }
     }
+    renderResults();
     // 추가 장소 찜 투표
     $all('.pl-vote').forEach(function(btn){
       var itemId = btn.dataset.item;
@@ -1271,6 +1366,32 @@
     document.head.appendChild(s);
   }
 
+  // Leaflet 지연 로딩 — 카카오맵 실패 시에만 (초기 로딩 절약)
+  var leafletState = 'idle';
+  var leafletQueue = [];
+  function withLeaflet(cb){
+    if (window.L) { cb(true); return; }
+    if (leafletState === 'failed') { cb(false); return; }
+    leafletQueue.push(cb);
+    if (leafletState === 'loading') { return; }
+    leafletState = 'loading';
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js';
+    s.onload = function(){
+      leafletState = 'ready';
+      leafletQueue.forEach(function(f){ f(true); }); leafletQueue = [];
+    };
+    s.onerror = function(){
+      leafletState = 'failed';
+      leafletQueue.forEach(function(f){ f(false); }); leafletQueue = [];
+    };
+    document.head.appendChild(s);
+  }
+
   function pinHtml(s){
     return s.pin ? '<div class="pin-fill">' + s.pin + '</div>' : '<div class="pin-line"></div>';
   }
@@ -1329,11 +1450,14 @@
     if (!el) { return; }
     cfg.pending = true;
     withKakao(function(ok){
-      cfg.pending = false;
-      if (cfg.map) { return; }
-      if (ok) { initKakaoMap(cfg); return; }
-      if (window.L) { initLeafletMap(cfg); return; }
-      el.innerHTML = '<p class="w-msg" style="padding:16px">지도를 불러오지 못했어요.</p>';
+      if (cfg.map) { cfg.pending = false; return; }
+      if (ok) { cfg.pending = false; initKakaoMap(cfg); return; }
+      withLeaflet(function(lok){
+        cfg.pending = false;
+        if (cfg.map) { return; }
+        if (lok) { initLeafletMap(cfg); return; }
+        el.innerHTML = '<p class="w-msg" style="padding:16px">지도를 불러오지 못했어요.</p>';
+      });
     });
   }
   function syncMap(id){
@@ -1418,6 +1542,8 @@
   // '가고 싶어요' 버튼은 일정 탭·추가 장소 탭 어디에 있어도 동작
   document.addEventListener('click', function(e){
     if (!e.target.closest) { return; }
+    var f = e.target.closest('.conf-btn');
+    if (f) { castConfirm(f.dataset.group, f.dataset.wish); return; }
     var b = e.target.closest('.pl-vote');
     if (b) { castWish(b.dataset.item); return; }
     var c = e.target.closest('.chk-btn');
@@ -1455,6 +1581,7 @@
         if (k && s.indexOf(k) !== -1) { return placeAnswer(p); }
       }
     }
+    if (s.indexOf('1위') !== -1 || s.indexOf('결과') !== -1 || s.indexOf('집계') !== -1 || s.indexOf('현황') !== -1) { return resultsAnswer(); }
     if (s.indexOf('날씨') !== -1 || s.indexOf('비와') !== -1 || s.indexOf('더워') !== -1 || s.indexOf('기온') !== -1) { return weatherAnswer(); }
     if (s.indexOf('예약') !== -1 || s.indexOf('예매') !== -1 || s.indexOf('웨이팅') !== -1) {
       return '<b>예약 팁</b><br>· 빛의 시어터: 네이버 예매 약 10% 할인, 결제 1시간 후 바코드 활성화 — 미리 예매!<br>· 꽃, 궁: 1일 전 예약 필요<br>· 쌤쌤쌤: 캐치테이블 원격 줄서기 권장';
@@ -1576,6 +1703,81 @@
   markNow();
   setInterval(markNow, 5 * 60 * 1000);
 
+  /* ---------- 지금 1위 한눈에 (실시간 결과 보드) ---------- */
+  var RESULT_GROUPS = [
+    { label: '7/13 점심 (이촌)', gid: 'vote-0713-lunch', items: { 'extra-백옥': '백옥', 'extra-스즈란테이': '스즈란테이', 'extra-르미야': '르미야' } },
+    { label: '7/13 오후', gid: 'vote-0713-afternoon', items: { 'extra-더현대': '더현대 서울', 'extra-광장시장': '광장시장' } },
+    { label: '7/14 점심 (롯데월드몰)', gid: 'vote-0714-lunch', items: { 'extra-치즈룸': '치즈룸', 'extra-쌤쌤쌤': '쌤쌤쌤', 'extra-꽃궁': '꽃, 궁', 'extra-분지로': '분지로' } },
+    { label: '7/14 오후', gid: 'vote-0714-afternoon', items: { 'extra-별마당': '별마당 도서관', 'extra-성수동': '성수동' } },
+    { label: '7/14 저녁 (석촌호수)', gid: 'vote-0714-dinner', items: { 'extra-루반로즈': '루반로즈', 'extra-마신내': '마신내', 'extra-세컨드포레스트': '세컨드포레스트' } }
+  ];
+  function buildResults(){
+    if (typeof RESULT_GROUPS === 'undefined' || !RESULT_GROUPS) { return []; }
+    return RESULT_GROUPS.map(function(g){
+      var conf = votes.filter(function(v){ return v.item_id === 'confirm-' + g.gid && v.choice !== '취소'; })[0];
+      if (conf && g.items[conf.choice]) {
+        return { label: g.label, text: '✅ ' + g.items[conf.choice] + ' (확정!)' };
+      }
+      var best = 0, leaders = [];
+      Object.keys(g.items).forEach(function(id){
+        var n = votes.filter(function(v){ return v.item_id === id && v.choice === WISH; }).length;
+        if (n > best) { best = n; leaders = [g.items[id]]; }
+        else if (n === best && n > 0) { leaders.push(g.items[id]); }
+      });
+      return { label: g.label, text: best === 0 ? '아직 투표 없음' : leaders.join(' · ') + ' (' + best + '명)' };
+    });
+  }
+  function renderResults(){
+    var host = document.getElementById('resultBoard');
+    if (!host) { return; }
+    host.innerHTML = buildResults().map(function(r){
+      return '<div class="res-row"><span>' + r.label + '</span><b>' + r.text + '</b></div>';
+    }).join('');
+  }
+  function resultsAnswer(){
+    var rs = buildResults();
+    if (!rs.length) { return '아직 집계가 없어요.'; }
+    return '<b>지금 1위 현황</b><br>' + rs.map(function(r){ return '· ' + r.label + ': ' + r.text; }).join('<br>');
+  }
+  renderResults();
+
+  /* ---------- 모바일 스와이프 탭 전환 ---------- */
+  (function(){
+    var sx = 0, sy = 0, ok = false;
+    var ORDER = ['d0713', 'd0714', 'd0all'];
+    document.addEventListener('touchstart', function(e){
+      ok = !(e.target.closest && e.target.closest('.map, .w-strip, .chat-panel, .chat-chips'));
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', function(e){
+      if (!ok) { return; }
+      var dx = e.changedTouches[0].clientX - sx;
+      var dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) < 70 || Math.abs(dy) > 60) { return; }
+      var i = ORDER.indexOf(activeTab);
+      var next = dx < 0 ? i + 1 : i - 1;
+      if (next >= 0 && next < ORDER.length) { showTab(ORDER[next], false); }
+    }, { passive: true });
+  })();
+
+  /* ---------- 스크롤 리빌 ---------- */
+  (function(){
+    if (!('IntersectionObserver' in window)) { return; }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    var els = $all('.card, .option, .pl-row, .weather, .sum-card, .chk-row, .res-card');
+    els.forEach(function(el){ el.classList.add('rv'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.06 });
+    els.forEach(function(el){ io.observe(el); });
+  })();
+
   /* ---------- 날씨 (Open-Meteo) ---------- */
   var WEATHER_URL = 'https://api.open-meteo.com/v1/forecast'
     + '?latitude=37.51&longitude=127.10'
@@ -1621,8 +1823,12 @@
         }
         if (lo !== null) { WX[t.date] = { lo: lo, hi: hi, pop: maxPop }; }
         $('#' + t.el).innerHTML = cells || '<p class="w-msg">해당 날짜의 예보가 아직 없어요.</p>';
-        if (maxPop != null && maxPop >= 60) {
-          $('#' + t.el).insertAdjacentHTML('afterend', '<p class="rain-note">☔ 강수확률 최대 ' + maxPop + '% — 우산 챙기세요!</p>');
+        var notes = [];
+        if (maxPop != null && maxPop >= 60) { notes.push('☔ 강수확률 최대 ' + maxPop + '% — 우산 챙기세요!'); }
+        if (hi != null && hi >= 33) { notes.push('🥵 최고 ' + hi + '° — 코스는 최대한 실내로!'); }
+        else if (hi != null && hi >= 30) { notes.push('☀️ 최고 ' + hi + '° — 얇고 시원한 옷차림 추천'); }
+        if (notes.length) {
+          $('#' + t.el).insertAdjacentHTML('afterend', '<p class="rain-note">' + notes.join('<br>') + '</p>');
         }
       });
     })
