@@ -531,41 +531,6 @@
           </div>
         </li>
 
-        <li class="tl-item">
-          <div class="tl-time">18:00~</div>
-          <div class="tl-label">저녁 — 어떻게 할까? <span class="badge">투표</span></div>
-          <div class="options" data-item="vote-0713-dinner">
-
-            <div class="option" role="button" tabindex="0" data-choice="더현대 지하 식품관">
-              <div class="opt-top">
-                <div class="opt-name">더현대 지하 식품관에서 해결 <span class="opt-kind">오후 A안 선택 시</span></div>
-                <span class="opt-mine">✓ 내 선택</span>
-              </div>
-              <ul class="opt-list">
-                <li>바오서울 — 구글 4.9점 (리뷰 407개), 대만식 바오·우육면</li>
-                <li>쬬쬬 — 구글 4.9점 (리뷰 228개), 오코노미야키·명란교자</li>
-                <li>릴버거 — 구글 5.0점 (리뷰 439개), 스매시버거</li>
-              </ul>
-              <p class="opt-meta">영등포구 여의대로 108 (더현대 지하)</p>
-              <div class="mimo"><div class="avatar">🍔</div><div class="bubble">셋 다 평점 4.9~5.0! 웨이팅 있으니 17:30 전 입장 추천해요<span class="src">구글 후기 요약</span></div></div>
-              <div class="opt-foot">
-                <span class="tally" data-tally></span>
-              </div>
-            </div>
-
-            <div class="option" role="button" tabindex="0" data-choice="잠실 복귀 후 집 근처 저녁">
-              <div class="opt-top">
-                <div class="opt-name">잠실 복귀 후 집 근처 저녁</div>
-                <span class="opt-mine">✓ 내 선택</span>
-              </div>
-              <p class="opt-desc">첫 투어일이라 일찍 복귀해 쉬는 안. 엄마·이모 체력 상태 보고 당일 결정 가능</p>
-              <div class="opt-foot">
-                <span class="tally" data-tally></span>
-              </div>
-            </div>
-
-          </div>
-        </li>
       </ol>
 
     </div>
@@ -715,17 +680,6 @@
                   <button type="button" class="btn-ghost btn-sm pl-vote" data-item="extra-성수동">가고 싶어요</button>
                   <a class="btn-ghost btn-sm" href="https://map.naver.com/p/search/성수동 카페거리" target="_blank" rel="noopener">지도</a>
                 </div>
-              </div>
-            </div>
-
-            <div class="option" role="button" tabindex="0" data-choice="집에서 휴식">
-              <div class="opt-top">
-                <div class="opt-name">잠실 복귀 후 휴식</div>
-                <span class="opt-mine">✓ 내 선택</span>
-              </div>
-              <p class="opt-desc">점심 먹고 집으로 돌아와 쉬었다가 저녁만 일찍 나가는 안. 엄마·이모 체력 상태 보고 당일 결정 가능</p>
-              <div class="opt-foot">
-                <span class="tally" data-tally></span>
               </div>
             </div>
 
@@ -1356,8 +1310,8 @@
   });
 
   /* ---------- 여행 도우미 챗봇 (룰베이스) ---------- */
-  var DAY13_TXT = '<b>7/13 (월) — 용산 → 여의도</b><br>· 10:00 국립중앙박물관 (「우리들의 밥상」 특별전)<br>· 13:00 점심 투표: 백옥 / 스즈란테이 / 르미야<br>· 15:00 오후 투표: 더현대 서울 vs 광장시장<br>· 18:00 저녁 투표: 더현대 식품관 vs 잠실 복귀';
-  var DAY14_TXT = '<b>7/14 (화) — 광진 → 잠실 → 시내</b><br>· 10:00 빛의 시어터 (미리 예매!)<br>· 12:30 점심 투표: 쌤쌤쌤 / 꽃, 궁 / 분지로<br>· 14:00 오후 투표: 별마당 도서관 / 성수동 / 휴식<br>· 18:00 저녁 투표: 루반로즈 / 마신내 / 세컨드포레스트<br>· 식후 석촌호수 야간 산책';
+  var DAY13_TXT = '<b>7/13 (월) — 용산 → 여의도</b><br>· 10:00 국립중앙박물관 (「우리들의 밥상」 특별전)<br>· 13:00 점심 투표: 백옥 / 스즈란테이 / 르미야<br>· 15:00 오후 투표: 더현대 서울 vs 광장시장<br>· 저녁은 자유 — 당일 결정!';
+  var DAY14_TXT = '<b>7/14 (화) — 광진 → 잠실 → 시내</b><br>· 10:00 빛의 시어터 (미리 예매!)<br>· 12:30 점심 투표: 쌤쌤쌤 / 꽃, 궁 / 분지로<br>· 14:00 오후 투표: 별마당 도서관 vs 성수동<br>· 18:00 저녁 투표: 루반로즈 / 마신내 / 세컨드포레스트<br>· 식후 석촌호수 야간 산책';
 
   function placeAnswer(p){
     var out = '<b>' + p.name + '</b> · ' + p.kind + '<br>주소: ' + p.addr;
@@ -1397,7 +1351,7 @@
     if (s.indexOf('14') !== -1 || s.indexOf('화요일') !== -1 || s.indexOf('둘째') !== -1 || s.indexOf('마지막') !== -1) { return DAY14_TXT; }
     if (s.indexOf('일정') !== -1 || s.indexOf('코스') !== -1) { return DAY13_TXT + '<br><br>' + DAY14_TXT; }
     if (s.indexOf('점심') !== -1) { return '<b>점심 후보</b><br>· 7/13 이촌: 백옥 / 스즈란테이 / 르미야<br>· 7/14 롯데월드몰: 쌤쌤쌤 / 꽃, 궁 / 분지로<br>각 탭에서 투표해 주세요!'; }
-    if (s.indexOf('저녁') !== -1) { return '<b>저녁 후보</b><br>· 7/13: 더현대 식품관 vs 잠실 복귀<br>· 7/14 석촌호수: 루반로즈 / 마신내 / 세컨드포레스트'; }
+    if (s.indexOf('저녁') !== -1) { return '<b>저녁 후보</b><br>· 7/13: 자유 — 당일 결정<br>· 7/14 석촌호수: 루반로즈 / 마신내 / 세컨드포레스트 (투표!)'; }
     if (s.indexOf('주소') !== -1 || s.indexOf('어디') !== -1) { return '장소 이름으로 물어보시면 주소를 알려드릴게요.<br>예: "백옥", "빛의 시어터", "별마당"'; }
     if (s.indexOf('안녕') !== -1 || s.indexOf('하이') !== -1) { return '안녕하세요! 일정·날씨·장소·예약, 뭐든 물어보세요 😊'; }
     return '잘 못 알아들었어요 😅 이렇게 물어봐 주세요:<br>· "13일 일정" / "14일 일정"<br>· "날씨" / "예약"<br>· 장소 이름 (예: 빛의 시어터)';
